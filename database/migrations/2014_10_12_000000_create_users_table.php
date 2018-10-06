@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->increments('uid');
             $table->string('avatar')->default('')->comment('用户头像');
             $table->string('mobile', 20)->unique()->comment('用户手机号');
-            $table->string('password', 32)->comment('用户密码');
+            $table->string('password')->comment('加密后的用户密码');
             $table->string('email')->unique()->comment('用户邮箱');
             $table->boolean('admin')->default(false)->comment('是否是管理员：0-普通用户/1-管理员');
             $table->boolean('status')->default(true)->comment('账户状态：1-启用/0-停用');
