@@ -14,14 +14,24 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string("token")->default("");
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->increments('uid');
+            $table->string('avatar')->default('')->comment('用户头像');
+            $table->string('mobile', 20)->unique()->comment('用户手机号');
+            $table->string('password', 32)->comment('用户密码');
+            $table->string('email')->unique()->comment('用户邮箱');
+            $table->boolean('admin')->default(false)->comment('是否是管理员：0-普通用户/1-管理员');
+            $table->boolean('status')->default(true)->comment('账户状态：1-启用/0-停用');
+            $table->timestamp('email_verified_at')->nullable()->comment('邮箱验证时间，为空表示邮箱还未被验证');
+            $table->timestamp('mobile_verified_at')->nullable()->comment('手机号验证时间，为空表示手机还未被验证');
+            $table->rememberToken()->comment('记住密码TOKEN，即自动登录TOKEN，Token携带有效期');
+            $table->ipAddress('create_ip')->nullable()->comment('注册IP');
+            $table->ipAddress('update_ip')->nullable()->comment('更新IP');
+            $table->timestamp('last_login_at')->nullable()->comment('上次登录时间');
+            $table->ipAddress('last_login_ip')->nullable()->comment('上次登录IP');
             $table->timestamps();
+            $table->softDeletes()->comment('软删除时间');
+            $table->index('status');
+            $table->index('admin');
         });
     }
 
