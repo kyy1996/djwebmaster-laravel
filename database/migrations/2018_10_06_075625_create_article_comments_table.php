@@ -32,6 +32,8 @@ class CreateArticleCommentsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('parent_id')->references('id')->on('article_comments')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('article_id')->references('id')->on('articles')
+                  ->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

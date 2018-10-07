@@ -17,7 +17,7 @@ class CreateUserLogsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('uid')->comment('用户UID');
             $table->string('description')->comment('行为描述');
-            $table->morphs('loggable');
+            $table->nullableMorphs('loggable');
             $table->timestamps();
             $table->index('uid');
             $table->foreign('uid')->references('uid')->on('users')

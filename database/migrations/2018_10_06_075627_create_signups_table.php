@@ -27,7 +27,6 @@ class CreateSignupsTable extends Migration
             $table->boolean('valid')->default(true)->comment('是否有效');
             $table->text('comment')->default('')->comment('报名说明');
             $table->ipAddress('ip')->nullable()->comment('报名时用的IP');
-            $table->string('ua')->default('')->comment('报名时所用浏览器User-Agent');
             $table->timestamps();
             $table->softDeletes()->comment('软删除时间');
 

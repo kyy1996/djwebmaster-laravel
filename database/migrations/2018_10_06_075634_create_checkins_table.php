@@ -31,8 +31,10 @@ class CreateCheckinsTable extends Migration
             $table->index('activity_id');
             $table->index('uid');
             $table->index('stu_no');
-            $table->foreign('activity_id')->references('id')->on('activities');
-            $table->foreign('uid')->references('uid')->on('users');
+            $table->foreign('activity_id')->references('id')->on('activities')
+                  ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('uid')->references('uid')->on('users')
+                  ->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

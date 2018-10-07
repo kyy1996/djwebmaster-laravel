@@ -15,7 +15,7 @@ class CreateUserProfilesTable extends Migration
     {
         Schema::create('user_profiles', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('uid');
+            $table->unsignedInteger('uid')->unique();
             $table->string('stu_no', 12)->default('')->comment('学号');
             $table->string('school')->default('')->comment('学院');
             $table->string('class')->default('')->comment('班级');
@@ -23,7 +23,6 @@ class CreateUserProfilesTable extends Migration
             $table->timestamps();
             $table->softDeletes()->comment('软删除时间');
             $table->index('stu_no');
-            $table->index('uid');
             $table->foreign('uid')->references('uid')->on('users')
                   ->onUpdate('cascade')->onDelete('cascade');
         });
