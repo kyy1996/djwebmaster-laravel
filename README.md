@@ -1,3 +1,59 @@
+## Website of WebmasterClub at Shanghai Dianji Unversity
+
+[https://www.djwebclub.com](https://www.djwebclub.com)
+
+### Instruction for deployment
+
+#### Configure
+
+Copy the *environment configuration*
+
+```bash
+cp .env.example .env
+```
+
+and add your *database connection* and *SMTP Server* info to it.
+
+```bash
+vim .env
+```
+
+#### Install the infrastructure
+
+1. Generate the key for the application
+2. Migrate the database tables
+3. Install the Laravel Passport used to support OAuth Server
+
+```bash
+./artisan key:generate
+./artisan migrate
+./artisan passport:install --force
+```
+
+#### Fill up your database
+
+Seed some base data to your database.
+
+```bash
+./artisan db:seed
+```
+
+**Make sure to run it once precisely or duplicated data will be added**
+
+### Reinstall
+
+#### Clean your database
+
+```bash
+./artisan migrate:reset
+```
+
+#### Reinstall
+
+Reinstall like an new application according to *Instruction for deployment*
+
+## Laravel
+
 <p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
 <p align="center">
