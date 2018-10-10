@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateBlacklistsTable extends Migration
 {
@@ -28,6 +27,7 @@ class CreateBlacklistsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('uid')->references('uid')->on('users')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->comment = '黑名单用户信息表';
         });
     }
 

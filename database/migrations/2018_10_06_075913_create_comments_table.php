@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateCommentsTable extends Migration
 {
@@ -30,6 +29,7 @@ class CreateCommentsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('parent_id')->references('id')->on('comments')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->comment = '站点留言/回复信息表';
         });
     }
 

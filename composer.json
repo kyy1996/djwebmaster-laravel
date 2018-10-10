@@ -15,7 +15,8 @@
         "laravel/passport": "^7.0",
         "laravel/tinker": "^1.0",
         "nwidart/laravel-modules": "^4.0",
-        "spipu/html2pdf": "^5.2"
+        "spipu/html2pdf": "^5.2",
+        "zedisdog/laravel-schema-extend": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.5",
