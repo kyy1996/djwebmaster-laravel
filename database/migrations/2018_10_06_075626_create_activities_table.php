@@ -20,6 +20,7 @@ class CreateActivitiesTable extends Migration
             $table->string('host')->default('')->comment('活动主持人：孔元元，或者孔元元/王一帅，斜杠分割多个人');
             $table->string('time')->default('')->comment('活动举办时间：周三20:00');
             $table->text('comment')->default('')->comment('活动备注');
+            $table->json('extra')->default('{}')->comment('额外信息：相关附件ID');
             $table->unsignedInteger('article_id')->nullable('')->comment('活动关联文章ID，可为空');
             $table->json('host_uids')->default('[]')->comment('活动主持人对应UID数组：[1,2]，因为一个活动可以有多个人来主持');
             $table->unsignedSmallInteger('availability')->default(50)->comment('活动可容纳人数');
@@ -34,6 +35,7 @@ class CreateActivitiesTable extends Migration
             $table->index('location');
             $table->foreign('article_id')->references('id')->on('articles')
                   ->onUpdate('cascade')->onDelete('cascade');
+            $table->comment = '活动表';
         });
     }
 

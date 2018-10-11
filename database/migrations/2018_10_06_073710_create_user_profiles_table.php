@@ -24,6 +24,7 @@ class CreateUserProfilesTable extends Migration
             $table->index('stu_no');
             $table->foreign('uid')->references('uid')->on('users')
                   ->onUpdate('cascade')->onDelete('cascade');
+            $table->comment = '用户详细信息表';
         });
     }
 

@@ -32,6 +32,7 @@ class CreateArticlesTable extends Migration
             $table->index(['title', 'hide']);
             $table->foreign('uid')->references('uid')->on('users')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->comment = '文章信息表';
         });
     }
 

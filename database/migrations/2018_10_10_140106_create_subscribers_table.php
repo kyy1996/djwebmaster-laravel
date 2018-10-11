@@ -18,7 +18,7 @@ class CreateSubscribersTable extends Migration
             $table->string('email')->default('')->comment('邮箱');
             $table->string('mobile')->default('')->comment('手机号');
             $table->string('scope')
-                  ->comment('用户订阅信息范围：all-全部/article-博客文章/activity_new-新活动/activity_start-活动开始/score-成绩通知/job_new-新职位/job_result-职位申请反馈/comment-评论与回复通知')
+                  ->comment('用户订阅信息范围：all-全部/article-博客文章/activity_new-新活动举办通知/activity_start-活动开始/score-成绩通知/job_new-新职位/job_result-职位申请反馈/comment-评论与回复通知')
                   ->default('');
             $table->boolean('valid')->default(true)->comment('是否有效，如果用户取消订阅则无效');
             $table->timestamps();

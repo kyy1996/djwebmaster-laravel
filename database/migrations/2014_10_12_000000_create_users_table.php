@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->softDeletes()->comment('软删除时间');
             $table->index('status');
             $table->index('admin');
+            $table->comment = '用户表';
         });
     }
 

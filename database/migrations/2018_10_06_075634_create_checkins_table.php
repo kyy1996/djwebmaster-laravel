@@ -34,6 +34,7 @@ class CreateCheckinsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('uid')->references('uid')->on('users')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->comment = '活动签到表';
         });
     }
 

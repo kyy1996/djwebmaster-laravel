@@ -21,6 +21,7 @@ class CreateJobApplicationsTable extends Migration
             $table->string('class')->default('')->comment('班级');
             $table->string('name')->default('')->comment('姓名');
             $table->text('resume')->nullable()->comment('申请简历');
+            $table->json('extra')->default('{}')->comment('额外信息：附件ID');
             $table->unsignedTinyInteger('status')->default(0)->comment('状态：-1-已拒绝/0-申请中/1-已审核/2-已通过');
             $table->unsignedInteger('operator_uid')->nullable()->comment('操作人UID');
             $table->timestamps();
@@ -36,6 +37,7 @@ class CreateJobApplicationsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('operator_uid')->references('uid')->on('users')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->comment = '职位申请信息表';
         });
     }
 

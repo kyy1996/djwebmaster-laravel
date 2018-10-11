@@ -14,11 +14,13 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
+            $table->nullableMorphs('commentable');
             $table->unsignedInteger('uid')->nullable()->comment('发表人用户UID');
             $table->unsignedInteger('parent_id')->nullable()->comment('父评论ID，也就是被回复的评论ID');
-            $table->string('nickname')->comment('发表用户昵称');
+            $table->string('nickname')->default('匿名')->comment('发表用户昵称');
             $table->string('email')->comment('发表人邮箱');
             $table->longText('content')->comment('内容');
+            $table->json('extra')->default('{}')->comment('额外信息：附件ID、相关URL');
             $table->ipAddress('ip')->comment('发表人IP');
             $table->timestamps();
             $table->softDeletes()->comment('软删除时间');
@@ -29,7 +31,7 @@ class CreateCommentsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('parent_id')->references('id')->on('comments')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
-            $table->comment = '站点留言/回复信息表';
+            $table->comment = '通用留言/回复信息表';
         });
     }
 

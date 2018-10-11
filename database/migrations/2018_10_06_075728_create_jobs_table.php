@@ -30,6 +30,7 @@ class CreateJobsTable extends Migration
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('article_id')->references('id')->on('articles')
                   ->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->comment = '招聘信息表';
         });
     }
 
