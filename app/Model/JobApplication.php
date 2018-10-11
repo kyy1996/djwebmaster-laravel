@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\JobApplication
+ * App\Model\JobApplication
  *
  * @property int $id
  * @property int $job_id 申请的职位ID
@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $class 班级
  * @property string $name 姓名
  * @property string|null $resume 申请简历
+ * @property string $extra 额外信息：附件ID
  * @property int $status 状态：-1-已拒绝/0-申请中/1-已审核/2-已通过
  * @property int|null $operator_uid 操作人UID
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereExtra($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereJobId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereName($value)

@@ -5,10 +5,11 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Menu
+ * App\Model\Menu
  *
  * @property int $id
  * @property string $module 所属模块
+ * @property string $group 菜单分组：main-页面左侧主菜单/user-右上角用户信息菜单/nav-主页导航菜单
  * @property string $title 菜单标题
  * @property int|null $parent_id 上级菜单ID
  * @property int $type 类型：1-url/2-主菜单
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Menu whereGroup($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereHide($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereIconClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereId($value)

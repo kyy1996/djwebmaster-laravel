@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Activity
+ * App\Model\Activity
  *
  * @property int $id
  * @property string $name 活动名称
@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $host 活动主持人：孔元元，或者孔元元/王一帅，斜杠分割多个人
  * @property string $time 活动举办时间：周三20:00
  * @property string $comment 活动备注
+ * @property string $extra 额外信息：相关附件ID
  * @property int $article_id 活动关联文章ID，可为空
  * @property string $host_uids 活动主持人对应UID数组：[1,2]，因为一个活动可以有多个人来主持
  * @property int $availability 活动可容纳人数
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereComment($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activity whereExtra($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereHide($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereHost($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereHostUids($value)

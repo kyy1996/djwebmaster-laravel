@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Signup
+ * App\Model\Signup
  *
  * @property int $id
  * @property int $activity_id 报名的活动ID
@@ -20,7 +20,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $valid 是否有效
  * @property string $comment 报名说明
  * @property string|null $ip 报名时用的IP
- * @property string $ua 报名时所用浏览器User-Agent
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at 软删除时间
@@ -37,7 +36,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereQq($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereSchool($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereStuNo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUa($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereValid($value)

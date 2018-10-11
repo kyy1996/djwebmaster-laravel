@@ -5,7 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\UserProfile
+ * App\Model\UserProfile
  *
  * @property int $id
  * @property int $uid
