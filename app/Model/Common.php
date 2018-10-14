@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Common
  *
- * @property string $name 配置项名称
- * @property string $type 配置项类型：text-文本/file-文件
- * @property string $value 配置值
+ * @property string                          $name  配置项名称
+ * @property string                          $type  配置项类型：text-文本/file-文件
+ * @property string                          $value 配置值
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Common whereCreatedAt($value)
@@ -21,5 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Common extends Model
 {
-    //
+    /**
+     * 相关记录
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function logs()
+    {
+        return $this->morphMany(UserLog::class, 'loggable');
+    }
 }
