@@ -61,7 +61,6 @@ class MorphMapProvider extends ServiceProvider
 //            $key            = \Illuminate\Support\Str::snake($key);
             $morphMap[$key] = $value;
         }
-        dd($morphMap);
         Relation::morphMap($morphMap);
     }
 
