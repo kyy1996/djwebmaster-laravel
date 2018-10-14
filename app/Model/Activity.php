@@ -8,23 +8,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Model\Activity
  *
- * @property int                             $id
- * @property string                          $name          活动名称
- * @property string                          $type          活动类型：教学活动/游戏/面基/xxx
- * @property string                          $location      活动举办地点
- * @property string                          $host          活动主持人：孔元元，或者孔元元/王一帅，斜杠分割多个人
- * @property string                          $time          活动举办时间：周三20:00
- * @property string                          $comment       活动备注
- * @property array                           $extra         额外信息：相关附件ID
- * @property int                             $article_id    活动关联文章ID，可为空
- * @property array                           $host_uids     活动主持人对应UID数组：[1,2]，因为一个活动可以有多个人来主持
- * @property int                             $availability  活动可容纳人数
- * @property int                             $signup_amount 活动报名人数，程序自动更新
- * @property boolean                         $hide          是否属于隐藏活动
- * @property boolean                         $pause         是否暂停该活动
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at    软删除时间
+ * @property int                                                     $id
+ * @property string                                                  $name          活动名称
+ * @property string                                                  $type          活动类型：教学活动/游戏/面基/xxx
+ * @property string                                                  $location      活动举办地点
+ * @property string                                                  $host          活动主持人：孔元元，或者孔元元/王一帅，斜杠分割多个人
+ * @property string                                                  $time          活动举办时间：周三20:00
+ * @property string                                                  $comment       活动备注
+ * @property array                                                   $extra         额外信息：相关附件ID
+ * @property int                                                     $article_id    活动关联文章ID，可为空
+ * @property array                                                   $host_uids     活动主持人对应UID数组：[1,2]，因为一个活动可以有多个人来主持
+ * @property int                                                     $availability  活动可容纳人数
+ * @property int                                                     $signup_amount 活动报名人数，程序自动更新
+ * @property boolean                                                 $hide          是否属于隐藏活动
+ * @property boolean                                                 $pause         是否暂停该活动
+ * @property \Illuminate\Support\Carbon|null                         $created_at
+ * @property \Illuminate\Support\Carbon|null                         $updated_at
+ * @property \Illuminate\Support\Carbon|null                         $deleted_at    软删除时间
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereArticleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereAvailability($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereComment($value)
@@ -43,6 +43,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Model\Article                                 $article
+ * @property-read \Illuminate\Database\Eloquent\Collection|Checkin[] $checkins
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
+ * @property-read \Illuminate\Database\Eloquent\Collection|Signup[]  $signups
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|Activity onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|Activity withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Activity withoutTrashed()
  */
 class Activity extends Model
 {
@@ -96,16 +106,6 @@ class Activity extends Model
     }
 
     /**
-     * 签到信息
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function checkins()
-    {
-        return $this->hasMany(Checkin::class)->with('user');
-    }
-
-    /**
      * 签到的用户
      *
      * @return \Illuminate\Support\Collection
@@ -113,6 +113,16 @@ class Activity extends Model
     public function checkinUsers()
     {
         return $this->checkins()->pluck('user');
+    }
+
+    /**
+     * 签到信息
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function checkins()
+    {
+        return $this->hasMany(Checkin::class)->with('user');
     }
 
     /**

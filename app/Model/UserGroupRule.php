@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Model\UserGroupRule
  *
- * @property int                             $id
- * @property string                          $module 权限规则所属模块
- * @property string                          $name   权限节点标识符，可以是：控制器/方法
- * @property string                          $title  权限节点名称
- * @property int                             $status 是否启用
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int                                                     $id
+ * @property string                                                  $module 权限规则所属模块
+ * @property string                                                  $name   权限节点标识符，可以是：控制器/方法
+ * @property string                                                  $title  权限节点名称
+ * @property int                                                     $status 是否启用
+ * @property \Illuminate\Support\Carbon|null                         $created_at
+ * @property \Illuminate\Support\Carbon|null                         $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereModule($value)
@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  */
 class UserGroupRule extends Model
 {

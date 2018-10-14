@@ -7,20 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Model\JobApplication
  *
- * @property int                             $id
- * @property int                             $job_id       申请的职位ID
- * @property int|null                        $uid          申请用户UID
- * @property string                          $stu_no       学号
- * @property string                          $school       学院
- * @property string                          $class        班级
- * @property string                          $name         姓名
- * @property string|null                     $resume       申请简历
- * @property string                          $extra        额外信息：附件ID
- * @property int                             $status       状态：-1-已拒绝/0-申请中/1-已审核/2-已通过
- * @property int|null                        $operator_uid 操作人UID
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at   软删除时间
+ * @property int                                                     $id
+ * @property int                                                     $job_id       申请的职位ID
+ * @property int|null                                                $uid          申请用户UID
+ * @property string                                                  $stu_no       学号
+ * @property string                                                  $school       学院
+ * @property string                                                  $class        班级
+ * @property string                                                  $name         姓名
+ * @property string|null                                             $resume       申请简历
+ * @property string                                                  $extra        额外信息：附件ID
+ * @property int                                                     $status       状态：-1-已拒绝/0-申请中/1-已审核/2-已通过
+ * @property int|null                                                $operator_uid 操作人UID
+ * @property \Illuminate\Support\Carbon|null                         $created_at
+ * @property \Illuminate\Support\Carbon|null                         $updated_at
+ * @property \Illuminate\Support\Carbon|null                         $deleted_at   软删除时间
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereDeletedAt($value)
@@ -36,6 +36,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Model\Job                                     $job
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
+ * @property-read \App\Model\User|null                               $operator
+ * @property-read \App\Model\User|null                               $user
  */
 class JobApplication extends Model
 {

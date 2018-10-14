@@ -8,20 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Article
  *
- * @property int                             $id
- * @property int                             $uid           发表用户UID
- * @property string                          $title         文章标题
- * @property string|null                     $content       文章内容
- * @property string                          $cover_img     封面图片URL
- * @property array                           $tags          文章标签JSON数组
- * @property boolean                         $hide          是否隐藏
- * @property int                             $read_count    阅读次数
- * @property int                             $comment_count 评论数量
- * @property array                           $extra         文章额外信息JSON对象，可以扩展附件，活动ID
- * @property string|null                     $ip            发表人IP
- * @property \Illuminate\Support\Carbon|null $deleted_at    软删除时间
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int                                                      $id
+ * @property int                                                      $uid           发表用户UID
+ * @property string                                                   $title         文章标题
+ * @property string|null                                              $content       文章内容
+ * @property string                                                   $cover_img     封面图片URL
+ * @property array                                                    $tags          文章标签JSON数组
+ * @property boolean                                                  $hide          是否隐藏
+ * @property int                                                      $read_count    阅读次数
+ * @property int                                                      $comment_count 评论数量
+ * @property array                                                    $extra         文章额外信息JSON对象，可以扩展附件，活动ID
+ * @property string|null                                              $ip            发表人IP
+ * @property \Illuminate\Support\Carbon|null                          $deleted_at    软删除时间
+ * @property \Illuminate\Support\Carbon|null                          $created_at
+ * @property \Illuminate\Support\Carbon|null                          $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCommentCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereContent($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereCoverImg($value)
@@ -37,6 +37,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|Activity[] $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[]  $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|Job[]      $jobs
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]  $logs
+ * @property-read \App\Model\User|null                                $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|Article onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|Article withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Article withoutTrashed()
  */
 class Article extends Model
 {

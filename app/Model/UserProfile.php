@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Model\UserProfile
  *
- * @property int                             $id
- * @property int                             $uid
- * @property string                          $stu_no     学号
- * @property string                          $school     学院
- * @property string                          $class      班级
- * @property string                          $name       姓名
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at 软删除时间
+ * @property int                                                     $id
+ * @property int                                                     $uid
+ * @property string                                                  $stu_no     学号
+ * @property string                                                  $school     学院
+ * @property string                                                  $class      班级
+ * @property string                                                  $name       姓名
+ * @property \Illuminate\Support\Carbon|null                         $created_at
+ * @property \Illuminate\Support\Carbon|null                         $updated_at
+ * @property \Illuminate\Support\Carbon|null                         $deleted_at 软删除时间
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereDeletedAt($value)
@@ -27,6 +27,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
+ * @property-read \App\Model\User                                    $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|UserProfile onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|UserProfile withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|UserProfile withoutTrashed()
  */
 class UserProfile extends Model
 {

@@ -49,6 +49,25 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdateIp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]                                                        $actionLogs
+ * @property-read \Illuminate\Database\Eloquent\Collection|Activity[]                                                       $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection|Article[]                                                        $articles
+ * @property-read \Illuminate\Database\Eloquent\Collection|Attachment[]                                                     $attachments
+ * @property-read \App\Model\Blacklist                                                                                      $blacklist
+ * @property-read \Illuminate\Database\Eloquent\Collection|Checkin[]                                                        $checkins
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[]                                                        $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|JobApplication[]                                                 $jobApplications
+ * @property-read \Illuminate\Database\Eloquent\Collection|Job[]                                                            $jobs
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]                                                        $logs
+ * @property-read \App\Model\UserProfile                                                                                    $profile
+ * @property-read \Illuminate\Database\Eloquent\Collection|Signup[]                                                         $signups
+ * @property-read \App\Model\Subscriber                                                                                     $subscriber
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserGroup[]                                                      $userGroups
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -103,16 +122,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 用户签到
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function checkins()
-    {
-        return $this->hasMany(Checkin::class, 'uid')->with('activity');
-    }
-
-    /**
      * 用户签到的活动
      *
      * @return \Illuminate\Support\Collection
@@ -123,13 +132,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 用户报名
+     * 用户签到
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function signups()
+    public function checkins()
     {
-        return $this->hasMany(Signup::class, 'uid')->with('activity');
+        return $this->hasMany(Checkin::class, 'uid')->with('activity');
     }
 
     /**
@@ -143,6 +152,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * 用户报名
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function signups()
+    {
+        return $this->hasMany(Signup::class, 'uid')->with('activity');
+    }
+
+    /**
      * 用户创建的招聘信息
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -153,16 +172,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 用户的职位申请信息
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function jobApplications()
-    {
-        return $this->hasMany(JobApplication::class, 'uid')->with('job');
-    }
-
-    /**
      * 用户申请的职位
      *
      * @return \Illuminate\Support\Collection
@@ -170,6 +179,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function appliedJobs()
     {
         return $this->jobApplications()->pluck('job');
+    }
+
+    /**
+     * 用户的职位申请信息
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class, 'uid')->with('job');
     }
 
     /**

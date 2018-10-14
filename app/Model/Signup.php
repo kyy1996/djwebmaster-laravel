@@ -8,22 +8,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Model\Signup
  *
- * @property int                             $id
- * @property int                             $activity_id 报名的活动ID
- * @property int|null                        $uid         报名用户UID
- * @property string                          $stu_no      学号
- * @property string                          $school      学院
- * @property string                          $class       班级
- * @property string                          $name        姓名
- * @property string                          $qq          联系QQ
- * @property string                          $mobile      通知手机号
- * @property string                          $email       通知邮箱
- * @property int                             $valid       是否有效
- * @property string                          $comment     报名说明
- * @property string|null                     $ip          报名时用的IP
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at  软删除时间
+ * @property int                                                     $id
+ * @property int                                                     $activity_id 报名的活动ID
+ * @property int|null                                                $uid         报名用户UID
+ * @property string                                                  $stu_no      学号
+ * @property string                                                  $school      学院
+ * @property string                                                  $class       班级
+ * @property string                                                  $name        姓名
+ * @property string                                                  $qq          联系QQ
+ * @property string                                                  $mobile      通知手机号
+ * @property string                                                  $email       通知邮箱
+ * @property int                                                     $valid       是否有效
+ * @property string                                                  $comment     报名说明
+ * @property string|null                                             $ip          报名时用的IP
+ * @property \Illuminate\Support\Carbon|null                         $created_at
+ * @property \Illuminate\Support\Carbon|null                         $updated_at
+ * @property \Illuminate\Support\Carbon|null                         $deleted_at  软删除时间
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereActivityId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereClass($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereComment($value)
@@ -41,6 +41,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereValid($value)
  * @mixin \Eloquent
+ * @property-read \App\Model\Activity                                $activity
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
+ * @property-read \App\Model\User|null                               $user
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|Signup onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|Signup withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Signup withoutTrashed()
  */
 class Signup extends Model
 {
