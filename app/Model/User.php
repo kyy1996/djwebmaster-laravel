@@ -83,7 +83,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'mobile', 'email', 'password',
+        'avatar', 'mobile', 'password', 'email', 'admin', 'status', 'email_verified_at', 'mobile_verified_at',
+        'remember_token', 'create_ip', 'update_ip', 'last_login_at', 'last_login_ip'
     ];
 
     /**
@@ -98,6 +99,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'admin'  => 'boolean',
         'status' => 'boolean'
+    ];
+
+    protected $appends = [
+        'checkinActivities', 'signupActivities', 'appliedJobs'
     ];
 
     /**
@@ -126,7 +131,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Support\Collection
      */
-    public function checkinActivities()
+    public function getCheckinActivitiesAttribute()
     {
         return $this->checkins()->pluck('activity');
     }
@@ -146,7 +151,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Support\Collection
      */
-    public function signupActivities()
+    public function getSignupActivitiesAttribute()
     {
         return $this->signups()->pluck('activity');
     }
@@ -176,7 +181,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Support\Collection
      */
-    public function appliedJobs()
+    public function getAppliedJobsAttribute()
     {
         return $this->jobApplications()->pluck('job');
     }

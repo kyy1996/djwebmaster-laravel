@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\File;
 
-use App\Signup;
+use App\Http\Controllers\Controller;
+use App\Model\Attachment;
 use Illuminate\Http\Request;
 
-class SignupController extends Controller
+class AttachmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class SignupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class SignupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Signup  $signup
+     * @param  Attachment $attachment
      * @return \Illuminate\Http\Response
      */
-    public function show(Signup $signup)
+    public function show(Attachment $attachment)
     {
         //
     }
@@ -52,10 +53,10 @@ class SignupController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Signup  $signup
+     * @param  Attachment $attachment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Signup $signup)
+    public function edit(Attachment $attachment)
     {
         //
     }
@@ -63,11 +64,11 @@ class SignupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Signup  $signup
+     * @param  \Illuminate\Http\Request $request
+     * @param  Attachment               $attachment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Signup $signup)
+    public function update(Request $request, Attachment $attachment)
     {
         //
     }
@@ -75,10 +76,10 @@ class SignupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Signup  $signup
+     * @param  Attachment $attachment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Signup $signup)
+    public function destroy(Attachment $attachment)
     {
         //
     }

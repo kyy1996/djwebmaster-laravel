@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Common;
 
-use App\Model\UserGroup;
+use App\Http\Controllers\Controller;
+use App\Model\Menu;
 use Illuminate\Http\Request;
 
-class UserGroupController extends Controller
+class MenuController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class UserGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class UserGroupController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\UserGroup  $userGroup
+     * @param  Menu $menu
      * @return \Illuminate\Http\Response
      */
-    public function show(UserGroup $userGroup)
+    public function show(Menu $menu)
     {
         //
     }
@@ -52,10 +53,10 @@ class UserGroupController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\UserGroup  $userGroup
+     * @param  Menu $menu
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserGroup $userGroup)
+    public function edit(Menu $menu)
     {
         //
     }
@@ -63,11 +64,11 @@ class UserGroupController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\UserGroup  $userGroup
+     * @param  \Illuminate\Http\Request $request
+     * @param  Menu                     $menu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserGroup $userGroup)
+    public function update(Request $request, Menu $menu)
     {
         //
     }
@@ -75,10 +76,10 @@ class UserGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\UserGroup  $userGroup
+     * @param  Menu $menu
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserGroup $userGroup)
+    public function destroy(Menu $menu)
     {
         //
     }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Model\UserGroupRule;
+use App\Http\Controllers\Controller;
+use App\Model\UserLog;
 use Illuminate\Http\Request;
 
-class UserGroupRuleController extends Controller
+class UserLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class UserGroupRuleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class UserGroupRuleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\UserGroupRule  $userGroupRule
+     * @param  UserLog $userLog
      * @return \Illuminate\Http\Response
      */
-    public function show(UserGroupRule $userGroupRule)
+    public function show(UserLog $userLog)
     {
         //
     }
@@ -52,10 +53,10 @@ class UserGroupRuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\UserGroupRule  $userGroupRule
+     * @param  UserLog $userLog
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserGroupRule $userGroupRule)
+    public function edit(UserLog $userLog)
     {
         //
     }
@@ -63,11 +64,11 @@ class UserGroupRuleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\UserGroupRule  $userGroupRule
+     * @param  \Illuminate\Http\Request $request
+     * @param  UserLog                  $userLog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserGroupRule $userGroupRule)
+    public function update(Request $request, UserLog $userLog)
     {
         //
     }
@@ -75,10 +76,10 @@ class UserGroupRuleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\UserGroupRule  $userGroupRule
+     * @param  UserLog $userLog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserGroupRule $userGroupRule)
+    public function destroy(UserLog $userLog)
     {
         //
     }

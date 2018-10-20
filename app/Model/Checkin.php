@@ -50,6 +50,10 @@ class Checkin extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'activity_id', 'uid', 'stu_no', 'school', 'class', 'name', 'valid', 'comment', 'ip', 'ua'
+    ];
+
     protected $casts = [
         'valid' => 'boolean'
     ];

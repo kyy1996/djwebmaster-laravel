@@ -39,6 +39,10 @@ class UserProfile extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'stu_no', 'school', 'class', 'name'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'uid');

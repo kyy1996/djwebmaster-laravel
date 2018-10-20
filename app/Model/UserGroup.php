@@ -37,6 +37,10 @@ class UserGroup extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'title', 'description', 'status', 'rules'
+    ];
+
     protected $casts = [
         'status' => 'boolean'
     ];

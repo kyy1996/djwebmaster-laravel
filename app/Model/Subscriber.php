@@ -39,6 +39,10 @@ class Subscriber extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'email', 'mobile', 'scope', 'valid'
+    ];
+
     protected $casts = [
         'valid' => 'boolean'
     ];

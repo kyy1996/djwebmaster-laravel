@@ -22,6 +22,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null                         $created_at
  * @property \Illuminate\Support\Carbon|null                         $updated_at
  * @property \Illuminate\Support\Carbon|null                         $deleted_at 记录被软删除的时间（文件不一定被删除）
+ * @property string                                                  $storage    存储类型：local-本地
+ * @property string                                                  $url        文件下载地址
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
+ * @property-read \App\Model\User|null                               $user
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereDeletedAt($value)
@@ -36,19 +41,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereValid($value)
- * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
- * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
- * @property-read \App\Model\User|null                               $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Attachment onlyTrashed()
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|Attachment withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Attachment withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereStorage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUrl($value)
+ * @mixin \Eloquent
  */
 class Attachment extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'uid', 'filename', 'storage', 'path', 'url', 'size', 'md5', 'mime', 'extension', 'extra', 'valid', 'count'
+    ];
 
     protected $casts = [
         'valid' => 'boolean',

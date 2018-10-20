@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Model\Subscriber;
+use App\Http\Controllers\Controller;
+use App\Model\Blacklist;
 use Illuminate\Http\Request;
 
-class SubscriberController extends Controller
+class BlacklistController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class SubscriberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class SubscriberController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Subscriber  $subscriber
+     * @param  Blacklist $blacklist
      * @return \Illuminate\Http\Response
      */
-    public function show(Subscriber $subscriber)
+    public function show(Blacklist $blacklist)
     {
         //
     }
@@ -52,10 +53,10 @@ class SubscriberController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Subscriber  $subscriber
+     * @param  Blacklist $blacklist
      * @return \Illuminate\Http\Response
      */
-    public function edit(Subscriber $subscriber)
+    public function edit(Blacklist $blacklist)
     {
         //
     }
@@ -63,11 +64,11 @@ class SubscriberController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Subscriber  $subscriber
+     * @param  \Illuminate\Http\Request $request
+     * @param  Blacklist                $blacklist
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Subscriber $subscriber)
+    public function update(Request $request, Blacklist $blacklist)
     {
         //
     }
@@ -75,10 +76,10 @@ class SubscriberController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Subscriber  $subscriber
+     * @param  Blacklist $blacklist
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Subscriber $subscriber)
+    public function destroy(Blacklist $blacklist)
     {
         //
     }

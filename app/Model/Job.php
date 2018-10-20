@@ -45,6 +45,10 @@ class Job extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'name', 'department', 'description', 'status', 'uid', 'ip'
+    ];
+
     protected $casts = [
         'status' => 'boolean'
     ];

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Job;
+use App\Http\Controllers\Controller;
+use App\Model\UserGroup;
 use Illuminate\Http\Request;
 
-class JobController extends Controller
+class UserGroupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class JobController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Job  $job
+     * @param  UserGroup $userGroup
      * @return \Illuminate\Http\Response
      */
-    public function show(Job $job)
+    public function show(UserGroup $userGroup)
     {
         //
     }
@@ -52,10 +53,10 @@ class JobController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Job  $job
+     * @param  UserGroup $userGroup
      * @return \Illuminate\Http\Response
      */
-    public function edit(Job $job)
+    public function edit(UserGroup $userGroup)
     {
         //
     }
@@ -63,11 +64,11 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Job  $job
+     * @param  \Illuminate\Http\Request $request
+     * @param  UserGroup                $userGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Job $job)
+    public function update(Request $request, UserGroup $userGroup)
     {
         //
     }
@@ -75,10 +76,10 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Job  $job
+     * @param  UserGroup $userGroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Job $job)
+    public function destroy(UserGroup $userGroup)
     {
         //
     }

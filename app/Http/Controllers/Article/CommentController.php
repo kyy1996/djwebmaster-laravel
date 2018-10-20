@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Article;
 
-use App\Blacklist;
+use App\Http\Controllers\Controller;
+use App\Model\Comment;
 use Illuminate\Http\Request;
 
-class BlacklistController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class BlacklistController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class BlacklistController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Blacklist  $blacklist
+     * @param  Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Blacklist $blacklist)
+    public function show(Comment $comment)
     {
         //
     }
@@ -52,10 +53,10 @@ class BlacklistController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Blacklist  $blacklist
+     * @param  Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Blacklist $blacklist)
+    public function edit(Comment $comment)
     {
         //
     }
@@ -63,11 +64,11 @@ class BlacklistController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Blacklist  $blacklist
+     * @param  \Illuminate\Http\Request $request
+     * @param  Comment                  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blacklist $blacklist)
+    public function update(Request $request, Comment $comment)
     {
         //
     }
@@ -75,10 +76,10 @@ class BlacklistController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Blacklist  $blacklist
+     * @param  Comment $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Blacklist $blacklist)
+    public function destroy(Comment $comment)
     {
         //
     }

@@ -1,11 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Activity;
 
-use App\Checkin;
+use App\Http\Controllers\Controller;
+use App\Model\Signup;
 use Illuminate\Http\Request;
 
-class CheckinController extends Controller
+/**
+ * Class SignupController
+ * 活动报名控制器
+ *
+ * @package App\Http\Controllers
+ */
+class SignupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +37,7 @@ class CheckinController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +48,10 @@ class CheckinController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Checkin  $checkin
+     * @param  Signup $signup
      * @return \Illuminate\Http\Response
      */
-    public function show(Checkin $checkin)
+    public function show(Signup $signup)
     {
         //
     }
@@ -52,10 +59,10 @@ class CheckinController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Checkin  $checkin
+     * @param  Signup $signup
      * @return \Illuminate\Http\Response
      */
-    public function edit(Checkin $checkin)
+    public function edit(Signup $signup)
     {
         //
     }
@@ -63,11 +70,11 @@ class CheckinController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Checkin  $checkin
+     * @param  \Illuminate\Http\Request $request
+     * @param  Signup                   $signup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Checkin $checkin)
+    public function update(Request $request, Signup $signup)
     {
         //
     }
@@ -75,10 +82,10 @@ class CheckinController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Checkin  $checkin
+     * @param  Signup $signup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Checkin $checkin)
+    public function destroy(Signup $signup)
     {
         //
     }

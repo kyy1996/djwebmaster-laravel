@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Job;
 
-use App\Common;
+use App\Http\Controllers\Controller;
+use App\Model\Job;
 use Illuminate\Http\Request;
 
-class CommonController extends Controller
+class JobController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class CommonController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class CommonController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Common  $common
+     * @param  Job $job
      * @return \Illuminate\Http\Response
      */
-    public function show(Common $common)
+    public function show(Job $job)
     {
         //
     }
@@ -52,10 +53,10 @@ class CommonController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Common  $common
+     * @param  Job $job
      * @return \Illuminate\Http\Response
      */
-    public function edit(Common $common)
+    public function edit(Job $job)
     {
         //
     }
@@ -63,11 +64,11 @@ class CommonController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Common  $common
+     * @param  \Illuminate\Http\Request $request
+     * @param  Job                      $job
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Common $common)
+    public function update(Request $request, Job $job)
     {
         //
     }
@@ -75,10 +76,10 @@ class CommonController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Common  $common
+     * @param  Job $job
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Common $common)
+    public function destroy(Job $job)
     {
         //
     }

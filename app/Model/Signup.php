@@ -54,6 +54,10 @@ class Signup extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'stu_no', 'school', 'class', 'name', 'qq', 'mobile', 'email', 'valid', 'comment', 'ip'
+    ];
+
     protected $casts = [
         'valid' => 'boolean'
     ];

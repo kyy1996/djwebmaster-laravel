@@ -1,10 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Activity;
 
-use App\Activity;
+use App\Http\Controllers\Controller;
+use App\Model\Activity;
 use Illuminate\Http\Request;
 
+/**
+ * Class ActivityController
+ * 活动管理控制器
+ *
+ * @package App\Http\Controllers\Activity
+ */
 class ActivityController extends Controller
 {
     /**
@@ -30,7 +37,7 @@ class ActivityController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,7 +48,7 @@ class ActivityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Activity  $activity
+     * @param  Activity $activity
      * @return \Illuminate\Http\Response
      */
     public function show(Activity $activity)
@@ -52,7 +59,7 @@ class ActivityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Activity  $activity
+     * @param  Activity $activity
      * @return \Illuminate\Http\Response
      */
     public function edit(Activity $activity)
@@ -63,8 +70,8 @@ class ActivityController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Activity  $activity
+     * @param  \Illuminate\Http\Request $request
+     * @param  Activity                 $activity
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Activity $activity)
@@ -75,7 +82,7 @@ class ActivityController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Activity  $activity
+     * @param  Activity $activity
      * @return \Illuminate\Http\Response
      */
     public function destroy(Activity $activity)

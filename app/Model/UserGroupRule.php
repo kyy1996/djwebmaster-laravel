@@ -30,6 +30,10 @@ class UserGroupRule extends Model
         'status' => 'boolean'
     ];
 
+    protected $fillable = [
+        'module', 'name', 'title', 'status'
+    ];
+
     /**
      * 相关记录
      *

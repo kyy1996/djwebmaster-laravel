@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\JobApplication;
+use App\Http\Controllers\Controller;
+use App\Model\UserGroupAccess;
 use Illuminate\Http\Request;
 
-class JobApplicationController extends Controller
+class UserGroupAccessController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class JobApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class JobApplicationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\JobApplication  $jobApplication
+     * @param  UserGroupAccess $userGroupAccess
      * @return \Illuminate\Http\Response
      */
-    public function show(JobApplication $jobApplication)
+    public function show(UserGroupAccess $userGroupAccess)
     {
         //
     }
@@ -52,10 +53,10 @@ class JobApplicationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\JobApplication  $jobApplication
+     * @param  UserGroupAccess $userGroupAccess
      * @return \Illuminate\Http\Response
      */
-    public function edit(JobApplication $jobApplication)
+    public function edit(UserGroupAccess $userGroupAccess)
     {
         //
     }
@@ -63,11 +64,11 @@ class JobApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\JobApplication  $jobApplication
+     * @param  \Illuminate\Http\Request $request
+     * @param  UserGroupAccess          $userGroupAccess
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, JobApplication $jobApplication)
+    public function update(Request $request, UserGroupAccess $userGroupAccess)
     {
         //
     }
@@ -75,10 +76,10 @@ class JobApplicationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\JobApplication  $jobApplication
+     * @param  UserGroupAccess $userGroupAccess
      * @return \Illuminate\Http\Response
      */
-    public function destroy(JobApplication $jobApplication)
+    public function destroy(UserGroupAccess $userGroupAccess)
     {
         //
     }

@@ -44,6 +44,10 @@ class Blacklist extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'stu_no', 'comment', 'valid', 'operator_uid'
+    ];
+
     protected $casts = [
         'valid' => 'boolean'
     ];

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Article;
+use App\Http\Controllers\Controller;
+use App\Model\Subscriber;
 use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class SubscriberController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Article  $article
+     * @param  Subscriber $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function show(Article $article)
+    public function show(Subscriber $subscriber)
     {
         //
     }
@@ -52,10 +53,10 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Article  $article
+     * @param  Subscriber $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function edit(Article $article)
+    public function edit(Subscriber $subscriber)
     {
         //
     }
@@ -63,11 +64,11 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Article  $article
+     * @param  \Illuminate\Http\Request $request
+     * @param  Subscriber               $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(Request $request, Subscriber $subscriber)
     {
         //
     }
@@ -75,10 +76,10 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Article  $article
+     * @param  Subscriber $subscriber
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Article $article)
+    public function destroy(Subscriber $subscriber)
     {
         //
     }

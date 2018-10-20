@@ -49,6 +49,10 @@ class Comment extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'nickname', 'email', 'content', 'extra', 'ip', 'parent_id'
+    ];
+
     protected $casts = [
         'extra' => 'array',
     ];

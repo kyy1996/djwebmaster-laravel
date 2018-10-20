@@ -48,6 +48,10 @@ class UserLog extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'title', 'description', 'result', 'extra', 'ip', 'ua'
+    ];
+
     protected $casts = [
         'result' => 'boolean',
         'extra'  => 'array'

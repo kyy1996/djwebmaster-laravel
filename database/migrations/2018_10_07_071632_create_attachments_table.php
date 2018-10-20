@@ -16,7 +16,9 @@ class CreateAttachmentsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('uid')->nullable()->comment('上传用户UID');
             $table->string('filename')->comment('原始文件名');
+            $table->string('storage')->comment('存储类型：local-本地');
             $table->string('path')->comment('文件存放绝对路径：URL或者绝对路径');
+            $table->string('url')->comment('文件下载地址');
             $table->unsignedInteger('size')->default(0)->comment('附件大小（字节）');
             $table->string('md5', 32)->default('')->comment('文件MD5');
             $table->string('mime')->default('application/octet-stream')->comment('MIME类型');

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Model\Attachment;
+use App\Http\Controllers\Controller;
+use App\Model\UserProfile;
 use Illuminate\Http\Request;
 
-class AttachmentController extends Controller
+class UserProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class AttachmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class AttachmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\Attachment  $attachment
+     * @param  UserProfile $userProfile
      * @return \Illuminate\Http\Response
      */
-    public function show(Attachment $attachment)
+    public function show(UserProfile $userProfile)
     {
         //
     }
@@ -52,10 +53,10 @@ class AttachmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\Attachment  $attachment
+     * @param  UserProfile $userProfile
      * @return \Illuminate\Http\Response
      */
-    public function edit(Attachment $attachment)
+    public function edit(UserProfile $userProfile)
     {
         //
     }
@@ -63,11 +64,11 @@ class AttachmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\Attachment  $attachment
+     * @param  \Illuminate\Http\Request $request
+     * @param  UserProfile              $userProfile
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Attachment $attachment)
+    public function update(Request $request, UserProfile $userProfile)
     {
         //
     }
@@ -75,10 +76,10 @@ class AttachmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\Attachment  $attachment
+     * @param  UserProfile $userProfile
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Attachment $attachment)
+    public function destroy(UserProfile $userProfile)
     {
         //
     }

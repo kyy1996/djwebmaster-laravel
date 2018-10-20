@@ -42,27 +42,37 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Activity whereUpdatedAt($value)
- * @mixin \Eloquent
  * @property-read \App\Model\Article                                 $article
  * @property-read \Illuminate\Database\Eloquent\Collection|Checkin[] $checkins
  * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \Illuminate\Database\Eloquent\Collection|Signup[]  $signups
+ * @property-read \Illuminate\Support\Collection                     $checkin_users
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Activity onlyTrashed()
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|Activity withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Activity withoutTrashed()
+ * @mixin \Eloquent
  */
 class Activity extends Model
 {
     use SoftDeletes;
+
+    protected $fillable = [
+        'name', 'type', 'location', 'host', 'time', 'comment', 'extra', 'article_id',
+        'host_uids', 'availability', 'signup_amount', 'hide', 'pause'
+    ];
 
     protected $casts = [
         'extra'     => 'array',
         'host_uids' => 'array',
         'hide'      => 'boolean',
         'pause'     => 'boolean'
+    ];
+
+    protected $appends = [
+        'checkinUsers'
     ];
 
     /**
@@ -110,7 +120,7 @@ class Activity extends Model
      *
      * @return \Illuminate\Support\Collection
      */
-    public function checkinUsers()
+    public function getCheckinUsersAttribute()
     {
         return $this->checkins()->pluck('user');
     }

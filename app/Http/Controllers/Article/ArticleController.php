@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Article;
 
-use App\Menu;
+use App\Http\Controllers\Controller;
+use App\Model\Article;
 use Illuminate\Http\Request;
 
-class MenuController extends Controller
+class ArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class MenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class MenuController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Menu  $menu
+     * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function show(Menu $menu)
+    public function show(Article $article)
     {
         //
     }
@@ -52,10 +53,10 @@ class MenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Menu  $menu
+     * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function edit(Menu $menu)
+    public function edit(Article $article)
     {
         //
     }
@@ -63,11 +64,11 @@ class MenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Menu  $menu
+     * @param  \Illuminate\Http\Request $request
+     * @param  Article                  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Menu $menu)
+    public function update(Request $request, Article $article)
     {
         //
     }
@@ -75,10 +76,10 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Menu  $menu
+     * @param  Article $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Menu $menu)
+    public function destroy(Article $article)
     {
         //
     }

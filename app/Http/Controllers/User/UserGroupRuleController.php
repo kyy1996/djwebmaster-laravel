@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use App\Model\UserGroupAccess;
+use App\Http\Controllers\Controller;
+use App\Model\UserGroupRule;
 use Illuminate\Http\Request;
 
-class UserGroupAccessController extends Controller
+class UserGroupRuleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class UserGroupAccessController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class UserGroupAccessController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Model\UserGroupAccess  $userGroupAccess
+     * @param  UserGroupRule $userGroupRule
      * @return \Illuminate\Http\Response
      */
-    public function show(UserGroupAccess $userGroupAccess)
+    public function show(UserGroupRule $userGroupRule)
     {
         //
     }
@@ -52,10 +53,10 @@ class UserGroupAccessController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Model\UserGroupAccess  $userGroupAccess
+     * @param  UserGroupRule $userGroupRule
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserGroupAccess $userGroupAccess)
+    public function edit(UserGroupRule $userGroupRule)
     {
         //
     }
@@ -63,11 +64,11 @@ class UserGroupAccessController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Model\UserGroupAccess  $userGroupAccess
+     * @param  \Illuminate\Http\Request $request
+     * @param  UserGroupRule            $userGroupRule
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserGroupAccess $userGroupAccess)
+    public function update(Request $request, UserGroupRule $userGroupRule)
     {
         //
     }
@@ -75,10 +76,10 @@ class UserGroupAccessController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Model\UserGroupAccess  $userGroupAccess
+     * @param  UserGroupRule $userGroupRule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserGroupAccess $userGroupAccess)
+    public function destroy(UserGroupRule $userGroupRule)
     {
         //
     }

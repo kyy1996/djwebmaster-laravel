@@ -43,6 +43,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class JobApplication extends Model
 {
+    protected $fillable = [
+        'uid', 'stu_no', 'school', 'class', 'name', 'resume', 'extra', 'status', 'operator_uid'
+    ];
+
     protected $casts = [
         'extra' => 'array'
     ];

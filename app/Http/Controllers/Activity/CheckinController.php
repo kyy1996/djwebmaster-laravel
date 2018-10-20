@@ -1,11 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Activity;
 
-use App\Comment;
+use App\Http\Controllers\Controller;
+use App\Model\Checkin;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller
+/**
+ * Class CheckinController
+ * 活动签到管理控制器
+ *
+ * @package App\Http\Controllers\Activity
+ */
+class CheckinController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +37,7 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +48,10 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Comment  $comment
+     * @param  Checkin $checkin
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show(Checkin $checkin)
     {
         //
     }
@@ -52,10 +59,10 @@ class CommentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Comment  $comment
+     * @param  Checkin $checkin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Comment $comment)
+    public function edit(Checkin $checkin)
     {
         //
     }
@@ -63,11 +70,11 @@ class CommentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comment  $comment
+     * @param  \Illuminate\Http\Request $request
+     * @param  Checkin                  $checkin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, Checkin $checkin)
     {
         //
     }
@@ -75,10 +82,10 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Comment  $comment
+     * @param  Checkin $checkin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Checkin $checkin)
     {
         //
     }

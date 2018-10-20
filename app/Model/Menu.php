@@ -49,6 +49,10 @@ class Menu extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'module', 'group', 'title', 'type', 'sort', 'hide', 'description', 'icon_class', 'status'
+    ];
+
     protected $casts = [
         'hide'   => 'boolean',
         'status' => 'boolean'

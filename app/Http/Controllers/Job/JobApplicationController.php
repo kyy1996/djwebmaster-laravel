@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Job;
 
-use App\UserLog;
+use App\Http\Controllers\Controller;
+use App\Model\JobApplication;
 use Illuminate\Http\Request;
 
-class UserLogController extends Controller
+class JobApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,7 +31,7 @@ class UserLogController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -41,10 +42,10 @@ class UserLogController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\UserLog  $userLog
+     * @param  JobApplication $jobApplication
      * @return \Illuminate\Http\Response
      */
-    public function show(UserLog $userLog)
+    public function show(JobApplication $jobApplication)
     {
         //
     }
@@ -52,10 +53,10 @@ class UserLogController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\UserLog  $userLog
+     * @param  JobApplication $jobApplication
      * @return \Illuminate\Http\Response
      */
-    public function edit(UserLog $userLog)
+    public function edit(JobApplication $jobApplication)
     {
         //
     }
@@ -63,11 +64,11 @@ class UserLogController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\UserLog  $userLog
+     * @param  \Illuminate\Http\Request $request
+     * @param  JobApplication           $jobApplication
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, UserLog $userLog)
+    public function update(Request $request, JobApplication $jobApplication)
     {
         //
     }
@@ -75,10 +76,10 @@ class UserLogController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\UserLog  $userLog
+     * @param  JobApplication $jobApplication
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserLog $userLog)
+    public function destroy(JobApplication $jobApplication)
     {
         //
     }

@@ -52,6 +52,10 @@ class Article extends Model
 {
     use SoftDeletes;
 
+    protected $fillable = [
+        'uid', 'title', 'content', 'cover_img', 'tags', 'hide', 'read_count', 'comment_count', 'extra', 'ip'
+    ];
+
     protected $casts = [
         'tags'  => 'array',
         'extra' => 'array',
