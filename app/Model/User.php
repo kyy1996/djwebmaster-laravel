@@ -63,6 +63,9 @@ use Laravel\Passport\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection|Signup[]                                                         $signups
  * @property-read \App\Model\Subscriber                                                                                     $subscriber
  * @property-read \Illuminate\Database\Eloquent\Collection|UserGroup[]                                                      $userGroups
+ * @property-read \Illuminate\Support\Collection                                                                            $applied_jobs
+ * @property-read \Illuminate\Support\Collection                                                                            $checkin_activities
+ * @property-read \Illuminate\Support\Collection                                                                            $signup_activities
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
  * @method static bool|null restore()
