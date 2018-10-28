@@ -1,4 +1,4 @@
-## Website of WebmasterClub at Shanghai Dianji Unversity
+## Website of WebmasterClub at Shanghai Dianji University
 
 [https://www.djwebclub.com](https://www.djwebclub.com)
 
