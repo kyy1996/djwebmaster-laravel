@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,10 +10,14 @@
 |
 */
 
-//Route::get('/', function () {
-//    return view('index');
-//});
+Route::get('/', function () {
+    return view('index');
+});
 
-Auth::routes();
+Auth::routes([
+    'verify' => true,
+]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Auth::id();
+
+//Route::get('/home', 'HomeController@index')->name('home');
