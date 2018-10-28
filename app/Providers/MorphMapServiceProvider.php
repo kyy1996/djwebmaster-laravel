@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class MorphMapProvider
+ * Class MorphMapServiceProvider
  * 多态关联用的模型名映射
  * 在数据库里会记录简短的别名，而不是完整的模型类名
  * https://laravel.com/docs/5.7/eloquent-relationships
@@ -30,7 +30,7 @@ use Illuminate\Support\ServiceProvider;
  * @package App\Providers
  * @author  alen
  */
-class MorphMapProvider extends ServiceProvider
+class MorphMapServiceProvider extends ServiceProvider
 {
     /**
      * 要转换为小写下划线方式的类名
@@ -56,7 +56,7 @@ class MorphMapProvider extends ServiceProvider
         $morphMap = [];
         foreach ($this->morph as $value) {
             $key = trim(trim($value), '/\\.');
-            $key = preg_replace('/\\\/', DIRECTORY_SEPARATOR, $key);
+            $key = str_replace('\\', DIRECTORY_SEPARATOR, $key);
             $key = pathinfo($key, PATHINFO_BASENAME);
 //            $key            = \Illuminate\Support\Str::snake($key);
             $morphMap[$key] = $value;
