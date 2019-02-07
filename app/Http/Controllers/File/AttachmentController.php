@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\File;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AppController;
 use App\Model\Attachment;
 use Illuminate\Http\Request;
 
-class AttachmentController extends Controller
+class AttachmentController extends AppController
 {
     /**
      * Display a listing of the resource.

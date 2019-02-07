@@ -9,20 +9,23 @@
 namespace App\Http\Response;
 
 use App\Model\Code;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 
 /**
+ * 响应
  * Class JsonResponse
  *
  * @package App\Http\Response
  */
 class JsonResponse extends \Illuminate\Http\Response
 {
-
-    public function __construct($data = null, int $status = 200, array $headers = [])
-    {
-        parent::__construct($data, $status, $headers);
-    }
-
+    /**
+     * 设置内容
+     *
+     * @param array $data
+     * @return \Illuminate\Http\Response
+     */
     public function setContent($data = []): \Illuminate\Http\Response
     {
         return parent::setContent($this->generateData($data));
@@ -47,5 +50,22 @@ class JsonResponse extends \Illuminate\Http\Response
 
         $defaultData['data'] = $data;
         return $defaultData;
+    }
+
+    /**
+     * Morph the given content into JSON.
+     *
+     * @param  mixed $content
+     * @return string
+     */
+    protected function morphToJson($content)
+    {
+        if ($content instanceof Jsonable) {
+            return $content->toJson();
+        } else if ($content instanceof Arrayable) {
+            return json_encode($content->toArray(), JSON_UNESCAPED_UNICODE);
+        }
+
+        return json_encode($content, JSON_UNESCAPED_UNICODE);
     }
 }

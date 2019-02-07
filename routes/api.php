@@ -11,29 +11,38 @@
 |
 */
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 //Route::get('article/index', 'Article\\ArticleController@getIndex');
+Route::prefix('/common')->group(function () {
+    Route::any('{module}/{controller}/{action?}', function (string $module, string $controller, string $action = 'index') {
+        $method     = strtolower(request()->method());
+        $module     = ucfirst($module);
+        $action     = $method . ucfirst($action);
+        $controller = ucfirst($controller) . 'Controller';
 
-Route::any('{module}/{controller}/{action}', function (string $module, string $controller, string $action) {
-    $method     = strtolower(request()->method());
-    $module     = ucfirst($module);
-    $action     = $method . ucfirst($action);
-    $controller = ucfirst($controller) . 'Controller';
-
-    $namespaces = [
-        'App',
-        'Http',
-        'Controllers',
-        $module,
-        $controller,
-    ];
-    $className  = implode('\\', $namespaces);
-    if (!class_exists($className)) {
-        throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className);
-    }
-    $class = new $className();
-    return $class->callAction($action, [request(),]);
+        $namespaces = [
+            'App',
+            'Http',
+            'Controllers',
+            $module,
+            $controller,
+        ];
+        $className  = implode('\\', $namespaces);
+        if (!class_exists($className)) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className);
+        }
+        $clazz = new ReflectionClass($className);
+        if (!$clazz->hasMethod($action)) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className . ':' . $action);
+        }
+        /** @var \App\Http\Controllers\AppController $class */
+        $class = new $className();
+        return $class->callAction($action, [request(),]);
+    });
 });

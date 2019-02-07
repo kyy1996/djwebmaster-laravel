@@ -19,16 +19,22 @@ class Code
     private static $code    = self::SUCCESS;
     private static $message = null;
 
-    public const SUCCESS       = 0;
-    public const ERR_FAIL      = -1;
-    public const ERR_URL_ERROR = -2;
+    public const SUCCESS             = 0;
+    public const ERR_FAIL            = 10001;
+    public const ERR_URL_ERROR       = 10002;
+    public const ERR_MODEL_NOT_FOUND = 10003;
+    public const ERR_PARAMETER       = 10004;
+    public const ERR_DB_FAIL         = 10005;
 
     public const DEFAULT_MESSAGE = '未定义';
 
     private static $messages = [
-        self::SUCCESS       => '成功',
-        self::ERR_FAIL      => '失败',
-        self::ERR_URL_ERROR => '没有找到请求的地址',
+        self::SUCCESS             => '成功',
+        self::ERR_FAIL            => '失败',
+        self::ERR_URL_ERROR       => '没有找到请求的地址',
+        self::ERR_MODEL_NOT_FOUND => '没有找到请求的资源',
+        self::ERR_PARAMETER       => '参数错误',
+        self::ERR_DB_FAIL         => '数据库操作失败',
     ];
 
     /**
@@ -44,7 +50,7 @@ class Code
         }
         self::$code = $code;
         //设置错误消息
-        ($message !== null) && (static::$message = $message);
+        static::$message = $message;
     }
 
     /**

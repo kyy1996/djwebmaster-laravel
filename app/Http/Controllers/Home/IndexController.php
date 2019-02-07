@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Home;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\AppController;
 
-class IndexController extends Controller
+class IndexController extends AppController
 {
     /**
      * Create a new controller instance.

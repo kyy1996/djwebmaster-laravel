@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|Activity[] $activities
  * @property-read \Illuminate\Database\Eloquent\Collection|Comment[]  $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|Job[]      $jobs
@@ -52,14 +52,20 @@ class Article extends Model
 {
     use SoftDeletes;
 
+    public $modelName = '文章';
+
     protected $fillable = [
-        'uid', 'title', 'content', 'cover_img', 'tags', 'hide', 'read_count', 'comment_count', 'extra', 'ip'
+        'uid', 'title', 'content', 'cover_img', 'tags', 'hide', 'read_count', 'comment_count', 'extra', 'ip',
     ];
 
     protected $casts = [
         'tags'  => 'array',
         'extra' => 'array',
-        'hide'  => 'boolean'
+        'hide'  => 'boolean',
+    ];
+
+    protected $with = [
+        'user', 'activities', 'jobs', 'comments', 'logs',
     ];
 
     /**

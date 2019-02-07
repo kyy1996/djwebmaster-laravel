@@ -50,10 +50,71 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        //region 没有匹配到路由
         if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             Code::setCode(Code::ERR_URL_ERROR);
-            return new JsonResponse($exception->getMessage(), Response::HTTP_NOT_FOUND);
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
+        //endregion
+        //region 找不到模型
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+            //找不到模型
+            //region 解析模型名称
+            $model         = $exception->getModel();
+            $pos           = strrpos($model, '\\');
+            $baseModelName = strtolower(substr($model, $pos ? $pos + 1 : 0));
+            $primaryKey    = 'id';
+            if (class_exists($model)) {
+                $model = new $model();
+                if (property_exists($model, 'modelName')) {
+                    $modelName = $model->modelName;
+                } else {
+                    $modelName = $baseModelName;
+                }
+                if (method_exists($model, 'getRouteKeyName')) {
+                    $primaryKey = $model->getRouteKeyName() ?: $primaryKey;
+                } else if (method_exists($model, 'getPrimaryKey')) {
+                    $primaryKey = $model->getPrimaryKey() ?: $primaryKey;
+                } else if (property_exists($model, 'primaryKey')) {
+                    $primaryKey = $model->primaryKey ?: $primaryKey;
+                }
+            } else {
+                $modelName = $model;
+            }
+            //endregion
+            //region 解析要获取的模型ID号
+            $ids = $exception->getIds();
+            if (!$ids) {
+                $ids = $request->route()->parameters();
+                if (key_exists($baseModelName, $ids)) {
+                    $ids = $ids[$baseModelName];
+                } else {
+                    $ids = array_values($ids);
+                }
+            }
+            if (is_array($ids) && count($ids) == 1) {
+                $ids = array_pop($ids);
+            }
+            if (is_numeric($ids)) {
+                $ids = +$ids;
+            }
+            //endregion
+            Code::setCode(Code::ERR_MODEL_NOT_FOUND, '没有找到' . $primaryKey . '为' . json_encode($ids, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '的' . $modelName);
+            return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+        }
+        //endregion
+        //region 参数错误
+        if ($exception instanceof \Symfony\Component\Routing\Exception\InvalidParameterException) {
+            Code::setCode($exception->getCode());
+            return new JsonResponse(['detail' => json_decode($exception->getMessage())], Response::HTTP_BAD_REQUEST);
+        }
+        //endregion
+        //region 数据库操作失败
+        if ($exception instanceof \Illuminate\Database\QueryException) {
+            Code::setCode(Code::ERR_DB_FAIL);
+            return new JsonResponse($exception->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        //endregion
         Code::setCode(Code::ERR_FAIL);
         return new JsonResponse([$exception->getMessage(), $exception->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
     }

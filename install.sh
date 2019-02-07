@@ -1,6 +1,8 @@
 #!/bin/sh
 
-pecl install igbinary redis xdebug
+# pecl install igbinary redis xdebug
+
+composer install
 
 ./artisan key:generate
 ./artisan migrate
