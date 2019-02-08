@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property int                                                     $id
  * @property string                                                  $module      所属模块
- * @property string                                                  $group       菜单分组：main-页面左侧主菜单/user-右上角用户信息菜单/nav-主页导航菜单
+ * @property string                                                  $group
+ *           菜单分组：main-页面左侧主菜单/user-右上角用户信息菜单/nav-主页导航菜单
  * @property string                                                  $title       菜单标题
  * @property int|null                                                $parent_id   上级菜单ID
  * @property int                                                     $type        类型：1-url/2-主菜单
@@ -36,7 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Menu whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\Menu|null                               $parent
  * @method static bool|null forceDelete()
@@ -50,12 +51,12 @@ class Menu extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'module', 'group', 'title', 'type', 'sort', 'hide', 'description', 'icon_class', 'status'
+        'module', 'group', 'title', 'type', 'sort', 'hide', 'description', 'icon_class', 'status',
     ];
 
     protected $casts = [
         'hide'   => 'boolean',
-        'status' => 'boolean'
+        'status' => 'boolean',
     ];
 
     /**

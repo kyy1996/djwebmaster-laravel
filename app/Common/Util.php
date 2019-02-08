@@ -10,6 +10,7 @@ namespace App\Common;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 /**
  * 工具类
@@ -25,8 +26,11 @@ class Util
      * @param \Illuminate\Http\Request $request
      * @return string
      */
-    public static function getUserIp(Request $request): string
+    public static function getUserIp(Request $request = null): string
     {
+        if ($request === null) {
+            $request = request();
+        }
         $ip = '';
         if ($request->server('HTTP_CLIENT_IP') && strcasecmp($request->server('HTTP_CLIENT_IP'), 'unknown')) {
             $ip = $request->server('HTTP_CLIENT_IP');
@@ -51,5 +55,50 @@ class Util
         }
         $ip && ($ip = preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches [0] : '');
         return $ip;
+    }
+
+    /**
+     * 递归合并数组
+     *
+     * @param array $arr1      被合并的数组（会被覆盖的数组）
+     * @param array ...$arrays 要合并的数组表列
+     * @return array
+     */
+    public static function arrayRecursiveMerge(array &$arr1, array ...$arrays): array
+    {
+        foreach ($arrays as &$array) {
+            foreach ($array as $key => $item) {
+                if (is_array($item) && Arr::exists($arr1, $key) && is_array($arr1[$key])) {
+                    $item = Util::arrayRecursiveMerge($arr1[$key], $item);
+                }
+                $arr1[$key] = $item;
+            }
+        }
+        return $arr1;
+    }
+
+    /**
+     * 统一转为json
+     *
+     * @param mixed $item
+     * @param int   $options
+     * @return false|string
+     */
+    public static function toJson($item, $options = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES): string
+    {
+        return json_encode($item, $options);
+    }
+
+    /**
+     * 从JSON转为数组
+     *
+     * @param string $json
+     * @param bool   $assoc
+     * @param int    $options
+     * @return false|string
+     */
+    public static function fromJson($json, $assoc = false, $options = JSON_THROW_ON_ERROR)
+    {
+        return json_decode($json, $assoc, 512, $options);
     }
 }

@@ -53,7 +53,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|Activity withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Activity withoutTrashed()
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  */
 class Activity extends Model
 {
@@ -61,18 +61,18 @@ class Activity extends Model
 
     protected $fillable = [
         'name', 'type', 'location', 'host', 'time', 'comment', 'extra', 'article_id',
-        'host_uids', 'availability', 'signup_amount', 'hide', 'pause'
+        'host_uids', 'availability', 'signup_amount', 'hide', 'pause',
     ];
 
     protected $casts = [
         'extra'     => 'array',
         'host_uids' => 'array',
         'hide'      => 'boolean',
-        'pause'     => 'boolean'
+        'pause'     => 'boolean',
     ];
 
     protected $appends = [
-        'checkinUsers'
+        'checkinUsers',
     ];
 
     /**

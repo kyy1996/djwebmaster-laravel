@@ -40,7 +40,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereValid($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \App\Model\Activity                                $activity
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User|null                               $user
@@ -55,11 +55,11 @@ class Signup extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'stu_no', 'school', 'class', 'name', 'qq', 'mobile', 'email', 'valid', 'comment', 'ip'
+        'uid', 'stu_no', 'school', 'class', 'name', 'qq', 'mobile', 'email', 'valid', 'comment', 'ip',
     ];
 
     protected $casts = [
-        'valid' => 'boolean'
+        'valid' => 'boolean',
     ];
 
     /**

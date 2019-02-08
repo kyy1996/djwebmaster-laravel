@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Event;
+use App\Model\Article;
+use App\Observers\ArticleLogObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,6 +30,7 @@ class EventServiceProvider extends ServiceProvider
     {
         parent::boot();
 
-        //
+        //注册监听器
+        Article::observe(ArticleLogObserver::class);
     }
 }

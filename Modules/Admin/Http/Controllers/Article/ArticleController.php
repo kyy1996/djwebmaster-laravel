@@ -26,6 +26,13 @@ class ArticleController extends AdminController
             'tags'     => 'filled|array',
             'hide'     => 'boolean',
         ],
+        'index'   => [
+            'title'    => '',
+            'content'  => '',
+            'coverImg' => '',
+            'tags'     => '',
+            'hide'     => 'boolean',
+        ],
     ];
 
     /**
@@ -37,7 +44,7 @@ class ArticleController extends AdminController
     public function index(Request $request): Response
     {
         $this->checkValidate($request->all(), 'index');
-        return $this->response();
+        return $this->response(Article::paginate($this->pageSize));
     }
 
     /**
@@ -62,7 +69,7 @@ class ArticleController extends AdminController
     {
         $this->checkValidate($request->all(), 'store');
         $data    = [
-            'uid'           => Auth::id() ?? null,
+            'uid'           => Auth::id(),
             'title'         => $request->input('title'),
             'content'       => $request->input('content'),
             'cover_img'     => $request->input('coverImg', ''),

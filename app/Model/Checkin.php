@@ -36,7 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Checkin whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Checkin whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Checkin whereValid($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \App\Model\Activity                                $activity
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User|null                               $user
@@ -51,11 +51,11 @@ class Checkin extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'activity_id', 'uid', 'stu_no', 'school', 'class', 'name', 'valid', 'comment', 'ip', 'ua'
+        'activity_id', 'uid', 'stu_no', 'school', 'class', 'name', 'valid', 'comment', 'ip', 'ua',
     ];
 
     protected $casts = [
-        'valid' => 'boolean'
+        'valid' => 'boolean',
     ];
 
     /**

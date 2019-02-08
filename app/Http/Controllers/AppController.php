@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Common\Util;
 use App\Model\Code;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -16,29 +17,51 @@ class AppController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $page = 1;
+
+    protected $pageSize = 20;
+
+    public function __construct()
+    {
+        //初始化分页
+        $page = request()->input('page');
+        if ($page !== null && is_integer($page) && +$page > 0) {
+            $this->page = $page;
+        }
+        $pageSize = request()->input('pageSize');
+        if ($pageSize !== null && is_integer($pageSize) && +$pageSize > 0) {
+            $this->pageSize = $pageSize;
+        }
+    }
+
     protected static $rules = [
-        "default" => [],
+        "default" => [
+            'page'     => 'filled|integer|min:1',
+            'pageSize' => 'filled|integer|min:1',
+        ],
     ];
 
     protected static $rulesMessages = [
         "default" => [
-            'required' => '部分参数缺失 [:attribute]',
-            'string'   => '格式错误，期望为字符串 [:attribute]',
-            'integer'  => '格式错误，期望为整数 [:attribute]',
-            'between'  => '范围错误 [:attribute],要求参数在:min - :max',
-            'in'       => '限定范围错误 [:attribute],要求参数在 :values 内',
-            'array'    => '格式错误[:attribute] 期望为数组',
-            'url'      => '格式错误[:attribute] 期望为URL',
-            'min'      => '数量不正确',
-            'max'      => '选中数过多，最多允许:max个 [:attribute]',
-            'unique'   => '数据重复 [:attribute]',
-            'exists'   => '记录不存在 [:attribute]', //定义[code:xxx] 会返回$code码
+            'required' => '缺少必填参数[:attribute]',
+            'filled'   => '[:attribute]不能为空',
+            'string'   => '格式错误，[:attribute]应该为字符串',
+            'integer'  => '格式错误，[:attribute]应该为整数',
+            'between'  => '[:attribute]范围错误，要求参数在:min - :max',
+            'in'       => '[:attribute]取值应该在 :values 内',
+            'array'    => '格式错误，[:attribute]应该为数组',
+            'url'      => '格式错误，[:attribute]应该为URL',
+            'min'      => '[:attribute]数量不正确，至少为:min',
+            'max'      => '选中数过多，最多允许:max个[:attribute]',
+            'unique'   => '[:attribute]数据重复',
+            'exists'   => '[:attribute]记录不存在', //定义[code:xxx] 会返回$code码
+            'boolean'  => '[:attribute]只能是0或1',
         ],
     ];
 
     protected static $rulesCodes = [
         "default" => [
-            "Exists" => Code::ERR_MODEL_NOT_FOUND //这里需要用大写,如果有下划线也去除boss_books => BossBooks
+            "Exists" => Code::ERR_MODEL_NOT_FOUND,
         ],
     ];
 
@@ -61,15 +84,15 @@ class AppController extends BaseController
             foreach ($failed as $para => $v) {
                 if (isset($rulesCode[$para])) {
                     $code = $rulesCode[$para];
-                    throw new InvalidParameterException(json_encode($errors, JSON_UNESCAPED_UNICODE), $code);
+                    throw new InvalidParameterException(Util::toJson($errors), $code);
                 }
                 foreach ($v as $rule => $vv) {
                     if (isset($rulesCode[$rule])) {
                         $code = $rulesCode[$rule];
-                        throw new InvalidParameterException(json_encode($errors, JSON_UNESCAPED_UNICODE), $code);
+                        throw new InvalidParameterException(Util::toJson($errors), $code);
                     }
                 }
-                throw new InvalidParameterException(json_encode($errors, JSON_UNESCAPED_UNICODE), $code);
+                throw new InvalidParameterException(Util::toJson($errors), $code);
             }
 
         }
@@ -77,30 +100,30 @@ class AppController extends BaseController
 
     protected function rules($scene = 'default')
     {
-        $rules = array_merge(self::$rules, static::$rules);
+        $rules = Util::arrayRecursiveMerge(self::$rules, static::$rules);
         $rule  = $rules['default'];
         if (isset($rules[$scene])) {
-            $rule = array_merge($rule, $rules[$scene]);
+            $rule = Util::arrayRecursiveMerge($rule, $rules[$scene]);
         }
         return $rule;
     }
 
     protected function rulesMessages($scene = 'default')
     {
-        $rulesMessages = array_merge(self::$rulesMessages, static::$rulesMessages);
+        $rulesMessages = Util::arrayRecursiveMerge(self::$rulesMessages, static::$rulesMessages);
         $rulesMessage  = $rulesMessages['default'];
         if (isset($rulesMessages[$scene])) {
-            $rulesMessage = array_merge($rulesMessage, $rulesMessages[$scene]);
+            $rulesMessage = Util::arrayRecursiveMerge($rulesMessage, $rulesMessages[$scene]);
         }
         return $rulesMessage;
     }
 
     protected function rulesCodes($scene = 'default')
     {
-        $rulesCodes = array_merge(self::$rulesCodes, static::$rulesCodes);
+        $rulesCodes = Util::arrayRecursiveMerge(self::$rulesCodes, static::$rulesCodes);
         $rulesCode  = $rulesCodes['default'];
         if (isset($rulesCodes[$scene])) {
-            $rulesCode = array_merge($rulesCode, $rulesCodes[$scene]);
+            $rulesCode = Util::arrayRecursiveMerge($rulesCode, $rulesCodes[$scene]);
         }
         return $rulesCode;
     }

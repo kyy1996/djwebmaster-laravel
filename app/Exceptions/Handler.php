@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Common\Util;
 use App\Http\Response\JsonResponse;
 use App\Model\Code;
 use Exception;
@@ -99,14 +100,14 @@ class Handler extends ExceptionHandler
                 $ids = +$ids;
             }
             //endregion
-            Code::setCode(Code::ERR_MODEL_NOT_FOUND, '没有找到' . $primaryKey . '为' . json_encode($ids, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '的' . $modelName);
+            Code::setCode(Code::ERR_MODEL_NOT_FOUND, '没有找到' . $primaryKey . '为' . Util::toJson($ids) . '的' . $modelName);
             return new JsonResponse(null, Response::HTTP_NOT_FOUND);
         }
         //endregion
         //region 参数错误
         if ($exception instanceof \Symfony\Component\Routing\Exception\InvalidParameterException) {
             Code::setCode($exception->getCode());
-            return new JsonResponse(['detail' => json_decode($exception->getMessage())], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['detail' => Util::fromJson($exception->getMessage())], Response::HTTP_BAD_REQUEST);
         }
         //endregion
         //region 数据库操作失败

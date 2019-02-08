@@ -8,6 +8,7 @@
 
 namespace App\Http\Response;
 
+use App\Common\Util;
 use App\Model\Code;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -63,9 +64,9 @@ class JsonResponse extends \Illuminate\Http\Response
         if ($content instanceof Jsonable) {
             return $content->toJson();
         } else if ($content instanceof Arrayable) {
-            return json_encode($content->toArray(), JSON_UNESCAPED_UNICODE);
+            return Util::toJson($content->toArray());
         }
 
-        return json_encode($content, JSON_UNESCAPED_UNICODE);
+        return Util::toJson($content);
     }
 }

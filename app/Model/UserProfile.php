@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereStuNo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserProfile whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User                                    $user
  * @method static bool|null forceDelete()
@@ -40,7 +40,7 @@ class UserProfile extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'stu_no', 'school', 'class', 'name'
+        'uid', 'stu_no', 'school', 'class', 'name',
     ];
 
     public function user()

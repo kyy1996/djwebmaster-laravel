@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Job whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Job whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Job whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|JobApplication[] $applications
  * @property-read \App\Model\Article|null                                   $article
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]        $logs
@@ -46,11 +46,11 @@ class Job extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'department', 'description', 'status', 'uid', 'ip'
+        'name', 'department', 'description', 'status', 'uid', 'ip',
     ];
 
     protected $casts = [
-        'status' => 'boolean'
+        'status' => 'boolean',
     ];
 
     /**

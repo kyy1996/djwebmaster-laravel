@@ -20,12 +20,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Common whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Common whereValue($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  */
 class Common extends Model
 {
     protected $fillable = [
-        'name', 'type', 'group', 'value'
+        'name', 'type', 'group', 'value',
     ];
 
     /**

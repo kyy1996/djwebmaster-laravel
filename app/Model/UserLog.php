@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Common\Util;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,7 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null                                             $loggable_type
  * @property int|null                                                $loggable_id
  * @property int                                                     $result      行为执行结果：0-失败/1-成功
- * @property string                                                  $extra       额外信息，相关URL/相关附件ID/相关文章ID/相关活动、职位/执行结果/失败原因等
+ * @property string                                                  $extra
+ *           额外信息，相关URL/相关附件ID/相关文章ID/相关活动、职位/执行结果/失败原因等
  * @property string|null                                             $ip          操作人IP
  * @property string                                                  $ua          操作人User-Agent
  * @property \Illuminate\Support\Carbon|null                         $created_at
@@ -34,7 +36,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|UserLog whereUa($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLog whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserLog whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent      $loggable
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User                                    $user
@@ -49,13 +51,27 @@ class UserLog extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'title', 'description', 'result', 'extra', 'ip', 'ua'
+        'uid', 'title', 'description', 'result', 'extra', 'ip', 'ua',
     ];
 
     protected $casts = [
         'result' => 'boolean',
-        'extra'  => 'array'
+        'extra'  => 'array',
     ];
+
+    /**
+     * 生成一个新的日志模型
+     *
+     * @param array $attributes
+     * @return \App\Model\UserLog
+     */
+    public static function getOne(array $attributes = [])
+    {
+        $static      = new static($attributes);
+        $static->uid = \Auth::id();
+        $static->ip  = Util::getUserIp();
+        return $static;
+    }
 
     /**
      * 操作用户

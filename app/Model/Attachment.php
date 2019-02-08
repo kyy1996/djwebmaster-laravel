@@ -48,19 +48,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Attachment withoutTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereStorage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUrl($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  */
 class Attachment extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'filename', 'storage', 'path', 'url', 'size', 'md5', 'mime', 'extension', 'extra', 'valid', 'count'
+        'uid', 'filename', 'storage', 'path', 'url', 'size', 'md5', 'mime', 'extension', 'extra', 'valid', 'count',
     ];
 
     protected $casts = [
         'valid' => 'boolean',
-        'extra' => 'array'
+        'extra' => 'array',
     ];
 
     /**

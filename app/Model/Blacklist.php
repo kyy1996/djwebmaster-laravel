@@ -30,7 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Blacklist whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Blacklist whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Blacklist whereValid($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User                                    $operator
  * @property-read \App\Model\User|null                               $user
@@ -45,11 +45,11 @@ class Blacklist extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'stu_no', 'comment', 'valid', 'operator_uid'
+        'uid', 'stu_no', 'comment', 'valid', 'operator_uid',
     ];
 
     protected $casts = [
-        'valid' => 'boolean'
+        'valid' => 'boolean',
     ];
 
     /**

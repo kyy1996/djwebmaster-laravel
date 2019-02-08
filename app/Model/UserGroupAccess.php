@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int                       $group_id
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupAccess whereGroupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupAccess whereUid($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \App\Model\User      $user
  * @property-read \App\Model\UserGroup $userGroup
  */

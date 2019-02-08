@@ -14,9 +14,9 @@ class CreateUserLogsTable extends Migration
     {
         Schema::create('user_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('uid')->comment('用户UID');
+            $table->unsignedInteger('uid')->nullable()->comment('用户UID');
             $table->string('title')->default('')->comment('行为标题');
-            $table->string('description')->comment('行为描述，可以是markdown');
+            $table->string('description', 500)->comment('行为描述，可以是markdown');
             $table->nullableMorphs('loggable');
             $table->boolean('result')->default(true)->comment('行为执行结果：0-失败/1-成功');
             $table->json('extra')->default('{}')->comment('额外信息，相关URL/相关附件ID/相关文章ID/相关活动、职位/执行结果/失败原因等');

@@ -65,7 +65,7 @@ class Article extends Model
     ];
 
     protected $with = [
-        'user', 'activities', 'jobs', 'comments', 'logs',
+        'user', 'activities', 'jobs', 'comments',
     ];
 
     /**

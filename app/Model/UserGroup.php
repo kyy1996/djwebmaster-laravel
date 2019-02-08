@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroup whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \Illuminate\Database\Eloquent\Collection|User[]    $users
  * @method static bool|null forceDelete()
@@ -38,11 +38,11 @@ class UserGroup extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'title', 'description', 'status', 'rules'
+        'title', 'description', 'status', 'rules',
     ];
 
     protected $casts = [
-        'status' => 'boolean'
+        'status' => 'boolean',
     ];
 
     /**

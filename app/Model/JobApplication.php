@@ -35,7 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereStuNo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|JobApplication whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \App\Model\Job                                     $job
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User|null                               $operator
@@ -44,11 +44,11 @@ use Illuminate\Database\Eloquent\Model;
 class JobApplication extends Model
 {
     protected $fillable = [
-        'uid', 'stu_no', 'school', 'class', 'name', 'resume', 'extra', 'status', 'operator_uid'
+        'uid', 'stu_no', 'school', 'class', 'name', 'resume', 'extra', 'status', 'operator_uid',
     ];
 
     protected $casts = [
-        'extra' => 'array'
+        'extra' => 'array',
     ];
 
     /**

@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null                                                $uid        订阅用户UID
  * @property string                                                  $email      邮箱
  * @property string                                                  $mobile     手机号
- * @property string                                                  $scope      用户订阅信息范围：all-全部/article-博客文章/activity_new-新活动举办通知/activity_start-活动开始/score-成绩通知/job_new-新职位/job_result-职位申请反馈/comment-评论与回复通知
+ * @property string                                                  $scope
+ *           用户订阅信息范围：all-全部/article-博客文章/activity_new-新活动举办通知/activity_start-活动开始/score-成绩通知/job_new-新职位/job_result-职位申请反馈/comment-评论与回复通知
  * @property int                                                     $valid      是否有效，如果用户取消订阅则无效
  * @property \Illuminate\Support\Carbon|null                         $created_at
  * @property \Illuminate\Support\Carbon|null                         $updated_at
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Subscriber whereValid($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User|null                               $user
  * @method static bool|null forceDelete()
@@ -40,11 +41,11 @@ class Subscriber extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'email', 'mobile', 'scope', 'valid'
+        'uid', 'email', 'mobile', 'scope', 'valid',
     ];
 
     protected $casts = [
-        'valid' => 'boolean'
+        'valid' => 'boolean',
     ];
 
     /**

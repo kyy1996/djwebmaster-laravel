@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereParentId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent      $commentable
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\Comment|null                            $parent
@@ -50,7 +50,7 @@ class Comment extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'nickname', 'email', 'content', 'extra', 'ip', 'parent_id'
+        'uid', 'nickname', 'email', 'content', 'extra', 'ip', 'parent_id',
     ];
 
     protected $casts = [

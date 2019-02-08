@@ -21,17 +21,17 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|UserGroupRule whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  */
 class UserGroupRule extends Model
 {
     protected $casts = [
-        'status' => 'boolean'
+        'status' => 'boolean',
     ];
 
     protected $fillable = [
-        'module', 'name', 'title', 'status'
+        'module', 'name', 'title', 'status',
     ];
 
     /**
