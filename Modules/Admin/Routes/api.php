@@ -21,6 +21,11 @@ Illuminate\Support\Facades\Route::prefix('/admin')->group(function (\Illuminate\
     $router->apiResource('article/article', 'Article\\ArticleController');
     $router->pattern('comment', '\\d+');
     $router->apiResource('article/comment', 'Article\\CommentController');
+    $router->pattern('user', '\\d+');
+    $router->pattern('log', '\\d+');
+    $router->apiResource('user/log', 'User\\UserLogController', [
+        'only' => ['index', 'show'],
+    ]);
 
     $router->any('{module}/{controller}/{action?}', function (string $module, string $controller, string $action = 'index') {
         $method     = strtolower(request()->method());

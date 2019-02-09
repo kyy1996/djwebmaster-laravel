@@ -13,8 +13,13 @@ use Illuminate\Support\Arr;
  */
 class ArticleLogObserver extends CommonLogBaseObserver
 {
-    protected static $messages = [
+    protected static $methodTitles = [
         'created' => '发表',
+    ];
+
+    protected static $extraFields = [
+        'id'    => 'ID',
+        'title' => '标题',
     ];
 
     public function created(Article $article)

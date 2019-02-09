@@ -44,7 +44,7 @@ class ArticleController extends AdminController
     public function index(Request $request): Response
     {
         $this->checkValidate($request->all(), 'index');
-        return $this->response(Article::paginate($this->pageSize));
+        return $this->response(Article::orderBy('updated_at', 'DESC')->paginate($this->pageSize));
     }
 
     /**
@@ -55,7 +55,7 @@ class ArticleController extends AdminController
      */
     public function create(Request $request): Response
     {
-        return $this->response(new Article());
+        return $this->response(new Article($request->all()));
     }
 
     /**

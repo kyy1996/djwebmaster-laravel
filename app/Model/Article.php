@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Article whereUpdatedAt($value)
  * @mixin \Illuminate\Database\Query\Builder
+ * @mixin \Illuminate\Database\Eloquent\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|Activity[] $activities
  * @property-read \Illuminate\Database\Eloquent\Collection|Comment[]  $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|Job[]      $jobs

@@ -3,7 +3,7 @@
 namespace Modules\Admin\Http\Controllers\User;
 
 use App\Model\UserLog;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Modules\Admin\Http\Controllers\AdminController;
 
 class UserLogController extends AdminController
@@ -13,74 +13,30 @@ class UserLogController extends AdminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): Response
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return $this->response(UserLog::orderBy('updated_at', 'DESC')->paginate($this->pageSize));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  UserLog $userLog
+     * @param  UserLog $log
      * @return \Illuminate\Http\Response
      */
-    public function show(UserLog $userLog)
+    public function show(UserLog $log): Response
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  UserLog $userLog
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserLog $userLog)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  UserLog                  $userLog
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserLog $userLog)
-    {
-        //
+        return $this->response($log);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  UserLog $userLog
+     * @param  UserLog $log
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserLog $userLog)
+    public function destroy(UserLog $log): Response
     {
-        //
+        return $this->response($log->delete());
     }
 }
