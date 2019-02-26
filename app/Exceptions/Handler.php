@@ -110,6 +110,13 @@ class Handler extends ExceptionHandler
             return new JsonResponse(['detail' => Util::fromJson($exception->getMessage())], Response::HTTP_BAD_REQUEST);
         }
         //endregion
+        //region 校验失败
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            //校验失败
+            Code::setCode($exception->getCode(), $exception->getMessage());
+            return new JsonResponse($exception, Response::HTTP_BAD_REQUEST);
+        }
+        //endregion
         //region 数据库操作失败
         if ($exception instanceof \Illuminate\Database\QueryException) {
             Code::setCode(Code::ERR_DB_FAIL);

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\AppController;
+use App\Model\Code;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Password;
 
 class ResetPasswordController extends AppController
 {
@@ -25,7 +29,7 @@ class ResetPasswordController extends AppController
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -34,6 +38,44 @@ class ResetPasswordController extends AppController
      */
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('guest');
+    }
+
+    protected function sendResetLinkResponse(Request $request, string $response): Response
+    {
+        switch ($response) {
+            case Password::INVALID_USER:
+                //用户不存在
+                Code::setCode(Code::ERR_INVALID_USER);
+                break;
+            case Password::RESET_LINK_SENT:
+                //邮件发送成功
+                Code::setCode(Code::SUCCESS);
+                break;
+        }
+        return $this->response();
+    }
+
+    /**
+     * 发送重设密码链接失败
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $response
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendResetLinkFailedResponse(Request $request, string $response): Response
+    {
+        switch ($response) {
+            case Password::INVALID_USER:
+                //用户不存在
+                Code::setCode(Code::ERR_INVALID_USER);
+                break;
+            case Password::RESET_LINK_SENT:
+                //邮件发送成功
+                Code::setCode(Code::SUCCESS);
+                break;
+        }
+        return $this->response();
     }
 }

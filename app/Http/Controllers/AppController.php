@@ -51,11 +51,13 @@ class AppController extends BaseController
             'in'       => '[:attribute]取值应该在 :values 内',
             'array'    => '格式错误，[:attribute]应该为数组',
             'url'      => '格式错误，[:attribute]应该为URL',
+            'email'    => '格式错误，[:attribute]应该为EMAIL地址',
             'min'      => '[:attribute]数量不正确，至少为:min',
             'max'      => '选中数过多，最多允许:max个[:attribute]',
             'unique'   => '[:attribute]数据重复',
             'exists'   => '[:attribute]记录不存在', //定义[code:xxx] 会返回$code码
             'boolean'  => '[:attribute]只能是0或1',
+            'regex'    => '格式错误，[:attribute]不符合规则',
         ],
     ];
 
@@ -139,5 +141,24 @@ class AppController extends BaseController
     function response($data = null, int $status = 200, array $headers = []): Response
     {
         return new \App\Http\Response\JsonResponse($data, $status, $headers);
+    }
+
+    /**
+     * 分页转数组
+     *
+     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $pagination
+     * @return array
+     */
+    public function getPaginateResponse(\Illuminate\Contracts\Pagination\LengthAwarePaginator $pagination): array
+    {
+        return [
+            'items'    => $pagination->items(),
+            'pageInfo' => [
+                'pageIndex' => $pagination->currentPage(),
+                'total'     => $pagination->total(),
+                'lastPage'  => $pagination->lastPage(),
+                'pageSize'  => $pagination->perPage(),
+            ],
+        ];
     }
 }

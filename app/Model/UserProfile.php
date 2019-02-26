@@ -40,7 +40,10 @@ class UserProfile extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'uid', 'stu_no', 'school', 'class', 'name',
+        'stu_no', 'school', 'class', 'name',
+    ];
+    protected $visible  = [
+        'stu_no', 'school', 'class', 'name',
     ];
 
     public function user()

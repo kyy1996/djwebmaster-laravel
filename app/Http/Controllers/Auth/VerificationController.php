@@ -25,7 +25,7 @@ class VerificationController extends AppController
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -34,6 +34,7 @@ class VerificationController extends AppController
      */
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');

@@ -13,8 +13,7 @@ use Laravel\Passport\HasApiTokens;
  *
  * @property int
  *               $uid
- * @property string
- *               $avatar             用户头像
+ * @property string $avatar             用户头像
  * @property string
  *               $mobile             用户手机号
  * @property string
@@ -115,6 +114,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens;
     use SoftDeletes;
 
+    public $modelName = '用户';
+
     protected $primaryKey = 'uid';
 
     /**
@@ -125,6 +126,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'avatar', 'mobile', 'password', 'email', 'admin', 'status', 'email_verified_at', 'mobile_verified_at',
         'remember_token', 'create_ip', 'update_ip', 'last_login_at', 'last_login_ip',
+    ];
+
+    protected $with = [
+        'profile',
     ];
 
     /**
@@ -142,7 +147,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $appends = [
-        'checkinActivities', 'signupActivities', 'appliedJobs',
+        'checkin_activities', 'signup_activities', 'applied_jobs', 'email_verified', 'mobile_verified',
     ];
 
     /**
@@ -173,7 +178,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getCheckinActivitiesAttribute()
     {
-        return $this->checkins()->pluck('activity');
+        return $this->checkins()->pluck('activity_id');
     }
 
     /**
@@ -193,7 +198,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getSignupActivitiesAttribute()
     {
-        return $this->signups()->pluck('activity');
+        return $this->signups()->pluck('activity_id');
     }
 
     /**
@@ -223,7 +228,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getAppliedJobsAttribute()
     {
-        return $this->jobApplications()->pluck('job');
+        return $this->jobApplications()->pluck('job_id');
     }
 
     /**
@@ -233,17 +238,17 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function jobApplications()
     {
-        return $this->hasMany(JobApplication::class, 'uid')->with('job');
+        return $this->hasMany(JobApplication::class, 'uid')->with('job_id');
     }
 
     /**
      * 用户的订阅信息
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function subscriber()
     {
-        return $this->hasOne(Subscriber::class, 'uid');
+        return $this->hasMany(Subscriber::class, 'uid');
     }
 
     /**
@@ -315,5 +320,25 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(UserGroup::class, 'user_groups', 'uid', 'group_id')
                     ->using(UserGroupAccess::class);
+    }
+
+    /**
+     * 是否验证过email
+     *
+     * @return bool
+     */
+    public function getEmailVerifiedAttribute()
+    {
+        return $this->hasVerifiedEmail();
+    }
+
+    /**
+     * 是否验证过email
+     *
+     * @return bool
+     */
+    public function getMobileVerifiedAttribute()
+    {
+        return !is_null($this->mobile_verified_at);
     }
 }

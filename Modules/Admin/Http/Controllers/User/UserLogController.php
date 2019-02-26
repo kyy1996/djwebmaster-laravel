@@ -15,7 +15,7 @@ class UserLogController extends AdminController
      */
     public function index(): Response
     {
-        return $this->response(UserLog::orderBy('updated_at', 'DESC')->paginate($this->pageSize));
+        return $this->response($this->getPaginateResponse(UserLog::orderBy('updated_at', 'DESC')->paginate($this->pageSize)));
     }
 
     /**

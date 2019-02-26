@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -19,7 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //Route::get('article/index', 'Article\\ArticleController@getIndex');
-Route::prefix('/common')->group(function () {
+Route::middleware('web')->prefix('/common')->group(function () {
+    Route::prefix('/auth')->group(function () {
+        Auth::routes([
+            'verify' => true,
+        ]);
+    });
+
     Route::any('{module}/{controller}/{action?}', function (string $module, string $controller, string $action = 'index') {
         $method     = strtolower(request()->method());
         $module     = ucfirst($module);

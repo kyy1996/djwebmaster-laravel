@@ -19,22 +19,28 @@ class Code
     private static $code    = self::SUCCESS;
     private static $message = null;
 
-    public const SUCCESS             = 0;
-    public const ERR_FAIL            = 10001;
-    public const ERR_URL_ERROR       = 10002;
-    public const ERR_MODEL_NOT_FOUND = 10003;
-    public const ERR_PARAMETER       = 10004;
-    public const ERR_DB_FAIL         = 10005;
+    public const SUCCESS                = 0;
+    public const ERR_FAIL               = 10001;
+    public const ERR_URL_ERROR          = 10002;
+    public const ERR_MODEL_NOT_FOUND    = 10003;
+    public const ERR_PARAMETER          = 10004;
+    public const ERR_DB_FAIL            = 10005;
+    public const ERR_INVALID_CREDENTIAL = 10006;
+    public const ERR_INVALID_USER       = 10007;
+    public const ERR_SEND_EMAIL_FAIL    = 10008;
 
     public const DEFAULT_MESSAGE = '未定义';
 
     private static $messages = [
-        self::SUCCESS             => '成功',
-        self::ERR_FAIL            => '失败',
-        self::ERR_URL_ERROR       => '没有找到请求的地址',
-        self::ERR_MODEL_NOT_FOUND => '没有找到请求的资源',
-        self::ERR_PARAMETER       => '参数错误',
-        self::ERR_DB_FAIL         => '数据库操作失败',
+        self::SUCCESS                => '成功',
+        self::ERR_FAIL               => '失败',
+        self::ERR_URL_ERROR          => '没有找到请求的地址',
+        self::ERR_MODEL_NOT_FOUND    => '没有找到请求的资源',
+        self::ERR_PARAMETER          => '参数错误',
+        self::ERR_DB_FAIL            => '数据库操作失败',
+        self::ERR_INVALID_CREDENTIAL => '用户名密码错误',
+        self::ERR_INVALID_USER       => '用户不存在',
+        self::ERR_SEND_EMAIL_FAIL    => '邮件发送失败',
     ];
 
     /**
@@ -48,7 +54,7 @@ class Code
         if ($code === null) {
             throw new \InvalidArgumentException(__('给定的错误码不能为null'));
         }
-        self::$code = $code;
+        static::$code = $code;
         //设置错误消息
         static::$message = $message;
     }
@@ -60,7 +66,7 @@ class Code
      */
     public static function getCode(): int
     {
-        return self::$code !== null ? static::$code : static::ERR_FAIL;
+        return static::$code !== null ? static::$code : static::ERR_FAIL;
     }
 
     /**

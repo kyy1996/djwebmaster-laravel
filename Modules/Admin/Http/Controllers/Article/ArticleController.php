@@ -20,18 +20,18 @@ class ArticleController extends AdminController
 {
     protected static $rules = [
         'default' => [
-            'title'    => 'required|string|min:1',
-            'content'  => 'required|string|min:1',
-            'coverImg' => 'filled|url',
-            'tags'     => 'filled|array',
-            'hide'     => 'boolean',
+            'title'     => 'required|string|min:1',
+            'content'   => 'required|string|min:1',
+            'cover_img' => 'filled|url',
+            'tags'      => 'filled|array',
+            'hide'      => 'boolean',
         ],
         'index'   => [
-            'title'    => '',
-            'content'  => '',
-            'coverImg' => '',
-            'tags'     => '',
-            'hide'     => 'boolean',
+            'title'     => '',
+            'content'   => '',
+            'cover_img' => '',
+            'tags'      => '',
+            'hide'      => 'boolean',
         ],
     ];
 
@@ -44,7 +44,8 @@ class ArticleController extends AdminController
     public function index(Request $request): Response
     {
         $this->checkValidate($request->all(), 'index');
-        return $this->response(Article::orderBy('updated_at', 'DESC')->paginate($this->pageSize));
+        $pagination = Article::orderBy('updated_at', 'DESC')->paginate($this->pageSize);
+        return $this->response($this->getPaginateResponse($pagination));
     }
 
     /**
@@ -72,7 +73,7 @@ class ArticleController extends AdminController
             'uid'           => Auth::id(),
             'title'         => $request->input('title'),
             'content'       => $request->input('content'),
-            'cover_img'     => $request->input('coverImg', ''),
+            'cover_img'     => $request->input('cover_img', ''),
             'tags'          => $request->input('tags', []),
             'hide'          => $request->input('hide', 0),
             'read_count'    => 0,
@@ -107,7 +108,7 @@ class ArticleController extends AdminController
     public function update(Request $request, Article $article): Response
     {
         $this->checkValidate($request->all(), 'update');
-        ($coverImg = $request->input('coverImg')) !== null && $article->cover_img = $coverImg;
+        ($coverImg = $request->input('cover_img')) !== null && $article->cover_img = $coverImg;
         ($title = $request->input('title')) !== null && $article->title = $title;
         ($content = $request->input('content')) !== null && $article->content = $content;
         ($tags = $request->input('tags')) !== null && $article->tags = $tags;

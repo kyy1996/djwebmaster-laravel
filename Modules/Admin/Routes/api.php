@@ -16,16 +16,17 @@
 //});
 
 
-Illuminate\Support\Facades\Route::prefix('/admin')->group(function (\Illuminate\Routing\Router $router) {
+Illuminate\Support\Facades\Route::middleware('web')->prefix('/admin')->group(function (\Illuminate\Routing\Router $router) {
     $router->pattern('article', '\\d+');
-    $router->apiResource('article/article', 'Article\\ArticleController');
+    $router->apiResource('article/article', 'Article\ArticleController');
     $router->pattern('comment', '\\d+');
-    $router->apiResource('article/comment', 'Article\\CommentController');
+    $router->apiResource('article/comment', 'Article\CommentController');
     $router->pattern('user', '\\d+');
     $router->pattern('log', '\\d+');
     $router->apiResource('user/log', 'User\\UserLogController', [
         'only' => ['index', 'show'],
     ]);
+    $router->apiResource('user/user', 'User\UserProfileController');
 
     $router->any('{module}/{controller}/{action?}', function (string $module, string $controller, string $action = 'index') {
         $method     = strtolower(request()->method());
