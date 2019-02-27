@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Model\UserProfile
  *
- * @property int                                                     $id
  * @property int                                                     $uid
  * @property string                                                  $stu_no     学号
  * @property string                                                  $school     学院
@@ -37,6 +36,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class UserProfile extends Model
 {
+    protected $primaryKey = 'uid';
+
+    public $incrementing = false;
+
     use SoftDeletes;
 
     protected $fillable = [
