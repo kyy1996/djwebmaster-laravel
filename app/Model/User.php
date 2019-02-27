@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * App\Model\User
@@ -115,6 +116,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
     use HasApiTokens;
     use SoftDeletes;
     use \App\Traits\MustVerifyMobile;
+    use HasRoles;
 
     public $modelName = '用户';
 
@@ -311,17 +313,6 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
     public function logs()
     {
         return $this->morphMany(UserLog::class, 'loggable');
-    }
-
-    /**
-     * 用户所属用户组
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function userGroups()
-    {
-        return $this->belongsToMany(UserGroup::class, 'user_groups', 'uid', 'group_id')
-                    ->using(UserGroupAccess::class);
     }
 
     /**

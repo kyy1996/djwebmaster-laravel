@@ -6,7 +6,10 @@ use App\Common\Util;
 use App\Http\Response\JsonResponse;
 use App\Model\Code;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler
@@ -86,6 +89,7 @@ class Handler extends ExceptionHandler
             //region 解析要获取的模型ID号
             $ids = $exception->getIds();
             if (!$ids) {
+                //资源路由，id在地址参数里
                 $ids = $request->route()->parameters();
                 if (key_exists($baseModelName, $ids)) {
                     $ids = $ids[$baseModelName];
@@ -117,6 +121,24 @@ class Handler extends ExceptionHandler
             return new JsonResponse($exception, Response::HTTP_BAD_REQUEST);
         }
         //endregion
+        //region CSRF校验失败
+        if ($exception instanceof TokenMismatchException) {
+            Code::setCode(Code::ERR_CSRF);
+            return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
+        }
+        //endregion
+        //region 用户未登录
+        if ($exception instanceof AuthenticationException) {
+            Code::setCode(Code::ERR_NOT_LOGIN);
+            return new JsonResponse(null);
+        }
+        //endregion
+        //region 用户未登录
+        if ($exception instanceof AuthorizationException) {
+            Code::setCode(Code::ERR_NO_PERMISSION);
+            return new JsonResponse(null);
+        }
+        //endregion
         //region 数据库操作失败
         if ($exception instanceof \Illuminate\Database\QueryException) {
             Code::setCode(Code::ERR_DB_FAIL);
@@ -124,6 +146,11 @@ class Handler extends ExceptionHandler
         }
         //endregion
         Code::setCode(Code::ERR_FAIL);
-        return new JsonResponse([$exception->getMessage(), $exception->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        $message = trim($exception->getMessage());
+        if ($message) {
+            $message = ':' . $message;
+        }
+        $message = get_class($exception) . $message;
+        return new JsonResponse([$message, $exception->getTrace()], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

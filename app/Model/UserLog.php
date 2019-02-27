@@ -53,6 +53,8 @@ class UserLog extends Model
 {
     use SoftDeletes;
 
+    public $modelName = '用户操作日志';
+
     protected $fillable = [
         'uid', 'title', 'description', 'result', 'extra', 'ip', 'ua',
     ];

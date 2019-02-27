@@ -12,10 +12,11 @@ use App\Model\Common;
 use App\Model\Job;
 use App\Model\JobApplication;
 use App\Model\Menu;
+use App\Model\Permission;
+use App\Model\Role;
 use App\Model\Signup;
 use App\Model\Subscriber;
 use App\Model\User;
-use App\Model\UserGroup;
 use App\Model\UserLog;
 use App\Model\UserProfile;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -42,7 +43,7 @@ class MorphMapServiceProvider extends ServiceProvider
         Blacklist::class, Checkin::class, Comment::class,
         Common::class, Job::class, JobApplication::class,
         Menu::class, Signup::class, Subscriber::class,
-        User::class, UserLog::class, UserGroup::class,
+        User::class, UserLog::class, Role::class, Permission::class,
         UserProfile::class,
     ];
 

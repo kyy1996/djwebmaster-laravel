@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * |--------------------------------------------------------------------------
@@ -46,7 +47,7 @@ class LoginController extends AppController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('guest')->except('logout');
+//        $this->middleware('guest')->except('logout');
     }
 
     /**
@@ -56,7 +57,7 @@ class LoginController extends AppController
      */
     public function showLoginForm(): Response
     {
-        return $this->response();
+        return $this->response(Auth::user());
     }
 
     /**

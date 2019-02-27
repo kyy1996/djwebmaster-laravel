@@ -2,10 +2,18 @@
 
 namespace App\Http\Middleware;
 
+use App\Model\User;
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
+    protected $except = [
+        '/api/common/auth/*',
+        '/page/common/auth/*',
+    ];
+
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *
@@ -15,5 +23,50 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         return route('login');
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     * @param  string[]                $guards
+     * @return mixed
+     * @throws \Illuminate\Auth\AuthenticationException
+     */
+    public function handle($request, Closure $next, ...$guards)
+    {
+        if ($this->inExceptArray($request)) {
+            //如果在免登录地址内，直接通过
+            return $next($request);
+        }
+        //调试模式就免登录
+        if (!app()->environment('production') && $request->input('nologin', false) == true) {
+            $user = User::find(1);
+            if ($user) {
+                Auth::login($user);
+                return $next($request);
+            }
+        }
+        return parent::handle($request, $next, $guards);
+    }
+
+    /**
+     * 是否在免登录地址中
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return bool
+     */
+    protected function inExceptArray($request)
+    {
+        foreach ($this->except as $except) {
+            if ($except !== '/') {
+                $except = trim($except, '/');
+            }
+
+            if ($request->fullUrlIs($except) || $request->is($except)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

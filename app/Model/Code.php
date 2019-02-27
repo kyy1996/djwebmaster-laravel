@@ -29,6 +29,9 @@ class Code
     public const ERR_INVALID_USER       = 10007;
     public const ERR_SEND_EMAIL_FAIL    = 10008;
     public const ERR_VERIFIED_ONLY      = 10009;
+    public const ERR_CSRF               = 10010;
+    public const ERR_NOT_LOGIN          = 10011;
+    public const ERR_NO_PERMISSION      = 10012;
 
     public const DEFAULT_MESSAGE = '未定义';
 
@@ -43,6 +46,9 @@ class Code
         self::ERR_INVALID_USER       => '用户不存在',
         self::ERR_SEND_EMAIL_FAIL    => '邮件发送失败',
         self::ERR_VERIFIED_ONLY      => '邮箱或手机还没验证',
+        self::ERR_CSRF               => 'CSRF校验失败',
+        self::ERR_NOT_LOGIN          => '用户未登录',
+        self::ERR_NO_PERMISSION      => '没有权限',
     ];
 
     /**

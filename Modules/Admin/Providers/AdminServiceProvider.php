@@ -5,7 +5,7 @@ namespace Modules\Admin\Providers;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\ServiceProvider;
 
-class WebServiceProvider extends ServiceProvider
+class AdminServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -35,12 +35,12 @@ class WebServiceProvider extends ServiceProvider
      */
     public function registerTranslations()
     {
-        $langPath = resource_path('lang/modules/web');
+        $langPath = resource_path('lang/modules/admin');
 
         if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, 'web');
+            $this->loadTranslationsFrom($langPath, 'admin');
         } else {
-            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'web');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'admin');
         }
     }
 
@@ -52,10 +52,10 @@ class WebServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__ . '/../Config/config.php' => config_path('web.php'),
+            __DIR__ . '/../Config/config.php' => config_path('admin.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__ . '/../Config/config.php', 'web'
+            __DIR__ . '/../Config/config.php', 'admin'
         );
     }
 
@@ -66,7 +66,7 @@ class WebServiceProvider extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = resource_path('views/modules/web');
+        $viewPath = resource_path('views/modules/admin');
 
         $sourcePath = __DIR__ . '/../Resources/views';
 
@@ -75,8 +75,8 @@ class WebServiceProvider extends ServiceProvider
         ], 'views');
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/web';
-        }, \Config::get('view.paths')), [$sourcePath]), 'web');
+            return $path . '/modules/admin';
+        }, \Config::get('view.paths')), [$sourcePath]), 'admin');
     }
 
     /**

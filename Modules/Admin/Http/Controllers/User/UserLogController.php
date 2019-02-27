@@ -3,40 +3,56 @@
 namespace Modules\Admin\Http\Controllers\User;
 
 use App\Model\UserLog;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\Admin\Http\Controllers\AdminController;
 
 class UserLogController extends AdminController
 {
+    protected static $rules = [
+        'getIndex'     => [],
+        'deleteDelete' => [
+            'id' => 'required|integer|min:1',
+        ],
+        'getShow'      => [
+            'id' => 'required|integer|min:1',
+        ],
+    ];
+
     /**
      * Display a listing of the resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index(): Response
+    public function getIndex(Request $request): Response
     {
+        $this->checkValidate($request->all(), 'getIndex');
         return $this->response($this->getPaginateResponse(UserLog::orderBy('updated_at', 'DESC')->paginate($this->pageSize)));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  UserLog $log
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(UserLog $log): Response
+    public function getShow(Request $request): Response
     {
-        return $this->response($log);
+        $this->checkValidate($request->all(), 'getShow');
+        $userLog = UserLog::findOrFail($request->input('id'));
+        return $this->response($userLog);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  UserLog $log
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(UserLog $log): Response
+    public function deleteDelete(Request $request): Response
     {
-        return $this->response($log->delete());
+        $userLog = UserLog::findOrFail($request->input('id'));
+        return $this->response($userLog->delete());
     }
 }

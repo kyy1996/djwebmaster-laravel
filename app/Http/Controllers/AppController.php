@@ -36,8 +36,8 @@ class AppController extends BaseController
 
     protected static $rules = [
         "default" => [
-            'page'     => 'filled|integer|min:1',
-            'pageSize' => 'filled|integer|min:1',
+            'page'     => 'nullable|integer|min:1',
+            'pageSize' => 'nullable|integer|min:1',
         ],
     ];
 
