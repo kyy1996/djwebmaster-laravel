@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Contract\MustVerifyMobile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -108,11 +109,12 @@ use Laravel\Passport\HasApiTokens;
  * @method static \Illuminate\Database\Query\Builder|User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
 {
     use Notifiable;
     use HasApiTokens;
     use SoftDeletes;
+    use \App\Traits\MustVerifyMobile;
 
     public $modelName = '用户';
 
@@ -339,6 +341,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getMobileVerifiedAttribute()
     {
-        return !is_null($this->mobile_verified_at);
+        return !is_null($this->getAttribute('mobile_verified_at'));
     }
 }

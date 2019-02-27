@@ -28,6 +28,7 @@ class Code
     public const ERR_INVALID_CREDENTIAL = 10006;
     public const ERR_INVALID_USER       = 10007;
     public const ERR_SEND_EMAIL_FAIL    = 10008;
+    public const ERR_VERIFIED_ONLY      = 10009;
 
     public const DEFAULT_MESSAGE = '未定义';
 
@@ -41,6 +42,7 @@ class Code
         self::ERR_INVALID_CREDENTIAL => '用户名密码错误',
         self::ERR_INVALID_USER       => '用户不存在',
         self::ERR_SEND_EMAIL_FAIL    => '邮件发送失败',
+        self::ERR_VERIFIED_ONLY      => '邮箱或手机还没验证',
     ];
 
     /**
