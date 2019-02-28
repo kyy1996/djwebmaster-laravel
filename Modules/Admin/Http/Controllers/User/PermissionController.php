@@ -6,30 +6,48 @@ use App\Model\Code;
 use App\Model\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 use Modules\Admin\Http\Controllers\AdminController;
 
+/**
+ * 权限节点管理控制器
+ * Class PermissionController
+ *
+ * @package Modules\Admin\Http\Controllers\User
+ */
 class PermissionController extends AdminController
 {
 
-    protected static $rules = [
-        'default'      => [
-            'name'   => 'nullable|string|min:1',
-            'title'  => 'nullable|string|min:1',
-            'module' => 'nullable|string|min:1',
-        ],
-        'getShow'      => [
-            'id' => 'required|integer|min:1|exists:permissions,id',
-        ],
-        'postUpdate'   => [
-            'name'   => 'required|string|min:1',
-            'title'  => 'required|string|min:1',
-            'id'     => 'nullable|integer|min:1',
-            'module' => 'nullable|string|min:1',
-        ],
-        'deleteDelete' => [
-            'id' => 'required|integer|min:1|exists:permissions,id',
-        ],
-    ];
+    protected static $rules;
+
+    public function __construct()
+    {
+        parent::__construct();
+        static::$rules = [
+            'default'      => [
+                'name'   => 'nullable|string|min:1',
+                'title'  => 'nullable|string|min:1',
+                'module' => 'nullable|string|min:1',
+            ],
+            'getShow'      => [
+                'id' => 'required|integer|min:1|exists:permissions,id',
+            ],
+            'postUpdate'   => [
+                'name'   => [
+                    'required',
+                    'string',
+                    'min:1',
+                    Rule::unique('permissions')->ignore(\request()->input('id')),
+                ],
+                'title'  => 'required|string|min:1',
+                'id'     => 'nullable|integer|min:1',
+                'module' => 'nullable|string|min:1',
+            ],
+            'deleteDelete' => [
+                'id' => 'required|integer|min:1|exists:permissions,id',
+            ],
+        ];
+    }
 
     /**
      * Display a listing of the resource.

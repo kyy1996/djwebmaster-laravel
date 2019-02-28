@@ -9,8 +9,6 @@
 namespace App\Traits;
 
 
-use Illuminate\Http\Request;
-
 /**
  * 判断地址是否在排除地址列表中
  * Trait ExceptUrl
@@ -40,27 +38,5 @@ trait ExceptUrl
         }
 
         return false;
-    }
-
-    /**
-     * 使用路由，去除prefix，作为权限name
-     *
-     * @param $request
-     * @return string
-     */
-    public function getRoute(Request $request)
-    {
-        $routeAction = $request->route()->getAction();
-        $currentUri  = $request->getPathInfo();
-
-        $prefix = $routeAction['prefix'];
-        if ($prefix[0] !== '/') {
-            $prefix = '/' . $prefix;
-        }
-        if (!empty($prefix)) {
-            $currentUri = substr($currentUri, strlen($prefix));
-        }
-
-        return strtolower($currentUri);
     }
 }

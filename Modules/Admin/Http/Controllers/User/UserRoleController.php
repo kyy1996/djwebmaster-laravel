@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 use Modules\Admin\Http\Controllers\AdminController;
 
 /**
- * 用户与角色关联控制器
+ * 用户与角色权限关联管理控制器
  * Class UserRoleController
  *
  * @package Modules\Admin\Http\Controllers\User

@@ -26,7 +26,7 @@ class Role extends \Spatie\Permission\Models\Role
     public $guarded = ['*'];
 
     protected $fillable = [
-        'description', 'status', 'name', 'id', 'guard_name',
+        'description', 'status', 'name', 'title', 'id', 'guard_name', 'module',
     ];
 
     const STATUS_ALL     = -1;
