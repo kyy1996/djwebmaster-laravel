@@ -127,16 +127,22 @@ class Handler extends ExceptionHandler
             return new JsonResponse(null, Response::HTTP_BAD_REQUEST);
         }
         //endregion
-        //region 用户未登录
-        if ($exception instanceof AuthenticationException) {
-            Code::setCode(Code::ERR_NOT_LOGIN);
-            return new JsonResponse(null);
+        //region 在黑名单内
+        if ($exception instanceof BlacklistException) {
+            Code::setCode(Code::ERR_USER_BLACKLIST);
+            return new JsonResponse();
         }
         //endregion
         //region 用户未登录
+        if ($exception instanceof AuthenticationException) {
+            Code::setCode(Code::ERR_NOT_LOGIN);
+            return new JsonResponse();
+        }
+        //endregion
+        //region 没有权限
         if ($exception instanceof AuthorizationException) {
             Code::setCode(Code::ERR_NO_PERMISSION);
-            return new JsonResponse(null);
+            return new JsonResponse();
         }
         //endregion
         //region 数据库操作失败

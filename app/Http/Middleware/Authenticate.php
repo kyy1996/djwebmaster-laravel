@@ -3,12 +3,15 @@
 namespace App\Http\Middleware;
 
 use App\Model\User;
+use App\Traits\ExceptUrl;
 use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
+    use ExceptUrl;
+
     protected $except = [
         '/api/common/auth/*',
         '/page/common/auth/*',
@@ -39,7 +42,7 @@ class Authenticate extends Middleware
             return $next($request);
         }
         //调试模式就免登录
-        if (!app()->environment('production') && $request->input('nologin', false) == true) {
+        if (!app()->environment('production') && $request->input('nologin', false) && !$request->user()) {
             $user = User::find(1);
             if ($user) {
                 Auth::login($user);
@@ -47,26 +50,5 @@ class Authenticate extends Middleware
             }
         }
         return parent::handle($request, $next, $guards);
-    }
-
-    /**
-     * 是否在免登录地址中
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return bool
-     */
-    protected function inExceptArray($request)
-    {
-        foreach ($this->except as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
-            }
-
-            if ($request->fullUrlIs($except) || $request->is($except)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

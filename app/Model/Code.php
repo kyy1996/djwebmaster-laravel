@@ -32,6 +32,7 @@ class Code
     public const ERR_CSRF               = 10010;
     public const ERR_NOT_LOGIN          = 10011;
     public const ERR_NO_PERMISSION      = 10012;
+    public const ERR_USER_BLACKLIST     = 10013;
 
     public const DEFAULT_MESSAGE = '未定义';
 
@@ -49,6 +50,7 @@ class Code
         self::ERR_CSRF               => 'CSRF校验失败',
         self::ERR_NOT_LOGIN          => '用户未登录',
         self::ERR_NO_PERMISSION      => '没有权限',
+        self::ERR_USER_BLACKLIST     => '用户在黑名单内',
     ];
 
     /**

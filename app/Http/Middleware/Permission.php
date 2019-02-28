@@ -8,8 +8,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\ExceptUrl;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 
@@ -21,6 +21,8 @@ use Spatie\Permission\Exceptions\PermissionDoesNotExist;
  */
 class Permission
 {
+    use ExceptUrl;
+
     protected $except = [
         '/api/common/auth/*',
         '/page/common/auth/*',
@@ -59,49 +61,5 @@ class Permission
             return $next($request);
         }
         throw new AuthorizationException();
-    }
-
-
-    /**
-     * 是否在免登录地址中
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return bool
-     */
-    protected function inExceptArray($request)
-    {
-        foreach ($this->except as $except) {
-            if ($except !== '/') {
-                $except = trim($except, '/');
-            }
-
-            if ($request->fullUrlIs($except) || $request->is($except)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * 使用路由，去除prefix，作为权限name
-     *
-     * @param $request
-     * @return string
-     */
-    public function getRoute(Request $request)
-    {
-        $routeAction = $request->route()->getAction();
-        $currentUri  = $request->getPathInfo();
-
-        $prefix = $routeAction['prefix'];
-        if ($prefix[0] !== '/') {
-            $prefix = '/' . $prefix;
-        }
-        if (!empty($prefix)) {
-            $currentUri = substr($currentUri, strlen($prefix));
-        }
-
-        return strtolower($currentUri);
     }
 }

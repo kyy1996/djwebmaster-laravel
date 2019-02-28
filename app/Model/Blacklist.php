@@ -30,19 +30,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Blacklist whereUid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Blacklist whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Blacklist whereValid($value)
- * @mixin \Illuminate\Database\Query\Builder
+ * @mixin \Illuminate\Database\Eloquent\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User                                    $operator
  * @property-read \App\Model\User|null                               $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|Blacklist onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Blacklist onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|Blacklist withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Blacklist withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Blacklist withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Blacklist withoutTrashed()
  */
 class Blacklist extends Model
 {
+
     use SoftDeletes;
+
+    public $modelName = '黑名单信息';
 
     protected $fillable = [
         'uid', 'stu_no', 'comment', 'valid', 'operator_uid',
@@ -50,6 +53,10 @@ class Blacklist extends Model
 
     protected $casts = [
         'valid' => 'boolean',
+    ];
+
+    protected $with = [
+        'user', 'operator', 'logs',
     ];
 
     /**

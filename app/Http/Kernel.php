@@ -10,6 +10,7 @@ use App\Http\Middleware\Permission;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
+use App\Http\Middleware\UserBlacklist;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -45,6 +46,7 @@ class Kernel extends HttpKernel
             VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             'auth',
+            'blacklist',
             'permission',
         ],
 
@@ -72,5 +74,6 @@ class Kernel extends HttpKernel
         'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified'      => EnsureEmailOrMobileIsVerified::class,
         'permission'    => Permission::class,
+        'blacklist'     => UserBlacklist::class,
     ];
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Http\Controllers\User;
 
+use App\Model\Code;
 use App\Model\UserLog;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -53,6 +54,10 @@ class UserLogController extends AdminController
     public function deleteDelete(Request $request): Response
     {
         $userLog = UserLog::findOrFail($request->input('id'));
-        return $this->response($userLog->delete());
+        $ret     = $userLog->delete();
+        if (!$ret) {
+            Code::setCode(Code::ERR_DB_FAIL);
+        }
+        return $this->response($ret);
     }
 }

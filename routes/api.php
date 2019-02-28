@@ -48,8 +48,6 @@ Route::middleware('web')->prefix('/common')->group(function () {
         if (!$clazz->hasMethod($action)) {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className . ':' . $action);
         }
-        /** @var \App\Http\Controllers\AppController $class */
-        $class = new $className();
-        return $class->callAction($action, [request(),]);
+        return app($className)->callAction($action, [request(),]);
     });
 });

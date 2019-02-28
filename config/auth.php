@@ -71,7 +71,7 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'blacklist',
             'model' => \App\Model\User::class,
         ],
 

@@ -21,6 +21,11 @@ use Illuminate\Contracts\Support\Jsonable;
  */
 class JsonResponse extends \Illuminate\Http\Response
 {
+    public function __construct($content = null, int $status = 200, array $headers = [])
+    {
+        parent::__construct($content, $status, $headers);
+    }
+
     /**
      * 设置内容
      *

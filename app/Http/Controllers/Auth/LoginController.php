@@ -91,7 +91,8 @@ class LoginController extends AppController
      */
     protected function sendFailedLoginResponse(Request $request): Response
     {
-        Code::setCode(Code::ERR_INVALID_CREDENTIAL);
+        //如果提供者已经设置了错误码，那这里就不设置了
+        Code::getCode() === Code::SUCCESS && Code::setCode(Code::ERR_INVALID_CREDENTIAL);
         return $this->response();
     }
 
