@@ -11,7 +11,15 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Permission
+ *
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ * @package App\Model
+ */
 class Permission extends \Spatie\Permission\Models\Permission
 {
     use SoftDeletes;
+
+    public $modelName = '权限节点';
 }

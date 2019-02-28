@@ -38,8 +38,9 @@ class Permission
      */
     public function handle($request, \Closure $next): \Symfony\Component\HttpFoundation\Response
     {
-        if ($this->inExceptArray($request)) {
-            //如果在免登录地址内，直接通过
+        if ($this->inExceptArray($request) ||
+            (!app()->environment('production') && $request->input('nologin'))) {
+            //如果在免登录地址内，或者调试模式，直接通过
             return $next($request);
         }
         /** @var \App\Model\User $currentUser */

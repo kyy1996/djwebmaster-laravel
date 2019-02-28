@@ -97,7 +97,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
     ];
 
     protected $with = [
-        'profile',
+        'profile', 'roles',
     ];
 
     /**

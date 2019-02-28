@@ -11,11 +11,11 @@ use Modules\Admin\Http\Controllers\AdminController;
 class UserProfileController extends AdminController
 {
     protected static $rules = [
-        'default' => [
+        'default'      => [
             'pageIndex' => 'integer|min:1',
             'pageSize'  => 'integer|min:1',
         ],
-        'store'   => [
+        'postUpdate'   => [
             'email'    => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
             'mobile'   => 'nullable|string|max:15|unique:users',
@@ -26,16 +26,11 @@ class UserProfileController extends AdminController
                     'regex:/^(http:|https:)?\/\/[^:\s]+$/',
                 ],
         ],
-        'update'  => [
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'mobile'   => 'nullable|string|max:15|unique:users',
-            'avatar'   =>
-                [
-                    'nullable',
-                    'string',
-                    'regex:/^(http:|https:)?\/\/[^:\s]+$/',
-                ],
+        'deleteDelete' => [
+            'uid' => 'required|integer|min:1',
+        ],
+        'getShow'      => [
+            'uid' => 'required|integer|min:1',
         ],
     ];
 
@@ -44,7 +39,7 @@ class UserProfileController extends AdminController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): Response
+    public function getIndex(): Response
     {
         $user = User::paginate($this->pageSize);
         return $this->response($this->getPaginateResponse($user));
@@ -57,19 +52,19 @@ class UserProfileController extends AdminController
      * @return \Illuminate\Http\Response
      * @throws \Throwable
      */
-    public function store(Request $request): Response
+    public function postUpdate(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'store');
-        $data = [
-            'uid'       => $request->input('uid'),
-            'mobile'    => $request->input('mobile'),
-            'avatar'    => $request->input('avatar'),
-            'admin'     => $request->input('admin', false),
-            'status'    => $request->input('status', true),
-            'create_ip' => Util::getUserIp($request),
-            'update_ip' => Util::getUserIp($request),
-        ];
-        $user = new User($data);
+        $this->checkValidate($request->all(), 'postUpdate');
+        $uid             = $request->input('uid');
+        $user            = $uid > 0 ? User::findOrFail($uid) : new User();
+        $user->mobile    = $request->input('mobile', '');
+        $user->avatar    = $request->input('avatar', '');
+        $user->admin     = $request->input('admin', false);
+        $user->status    = $request->input('status', true);
+        $user->update_ip = Util::getUserIp($request);
+        if ($uid > 0) {
+            $user->create_ip = Util::getUserIp($request);
+        }
         $user->saveOrFail();
         $user->profile()->create();
         return $this->response($user);
@@ -78,45 +73,12 @@ class UserProfileController extends AdminController
     /**
      * Display the specified resource.
      *
-     * @param \App\Model\User $user
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function getShow(Request $request)
     {
-        return $this->response($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Model\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(User $user): Response
-    {
-        return $this->response($user);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param \App\Model\User           $user
-     * @return \Illuminate\Http\Response
-     * @throws \Throwable
-     */
-    public function update(Request $request, User $user)
-    {
-        $this->checkValidate($request->all(), 'store');
-        $data = [
-            'mobile'    => $request->input('mobile'),
-            'avatar'    => $request->input('avatar'),
-            'admin'     => $request->input('admin', false),
-            'status'    => $request->input('status', true),
-            'update_ip' => Util::getUserIp($request),
-        ];
-        $user->fill($data);
-        $user->saveOrFail();
+        $user = User::findOrFail($request->input('id'));
         return $this->response($user);
     }
 
@@ -126,7 +88,7 @@ class UserProfileController extends AdminController
      * @param \App\Model\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user): Response
+    public function deleteDelete(User $user): Response
     {
         $user->profile()->delete();
         $user->delete();
