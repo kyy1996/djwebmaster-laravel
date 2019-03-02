@@ -9,7 +9,6 @@
         "ext-curl": "^7.2",
         "ext-json": "^1.6",
         "ext-redis": "^4.1",
-        "ext-xdebug": "^2.6",
         "aliyuncs/oss-sdk-php": "^2.3",
         "endroid/qr-code": "^3.4",
         "fideloper/proxy": "^4.0",
@@ -30,7 +29,8 @@
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.0",
+        "ext-xdebug": "^2.6"
     },
     "autoload": {
         "classmap": [
