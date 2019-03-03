@@ -28,7 +28,7 @@ class AppController extends BaseController
         if ($page !== null && is_integer($page) && +$page > 0) {
             $this->page = $page;
         }
-        $pageSize = request()->input('pageSize');
+        $pageSize = request()->input('page_size');
         if ($pageSize !== null && is_integer($pageSize) && +$pageSize > 0) {
             $this->pageSize = $pageSize;
         }
@@ -152,13 +152,31 @@ class AppController extends BaseController
     public function getPaginateResponse(\Illuminate\Contracts\Pagination\LengthAwarePaginator $pagination): array
     {
         return [
-            'items'    => $pagination->items(),
-            'pageInfo' => [
-                'pageIndex' => $pagination->currentPage(),
-                'total'     => $pagination->total(),
-                'lastPage'  => $pagination->lastPage(),
-                'pageSize'  => $pagination->perPage(),
+            'items'     => $pagination->items(),
+            'page_info' => [
+                'page_index' => $pagination->currentPage(),
+                'total'      => $pagination->total(),
+                'last_page'  => $pagination->lastPage(),
+                'page_size'  => $pagination->perPage(),
             ],
         ];
+    }
+
+    /**
+     * 从关联数组转为带id的菜单列表
+     *
+     * @param array $array
+     * @return array
+     */
+    protected function convertToIdMenu(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            $result [] = [
+                'id'    => $key,
+                'title' => $value,
+            ];
+        }
+        return $result;
     }
 }

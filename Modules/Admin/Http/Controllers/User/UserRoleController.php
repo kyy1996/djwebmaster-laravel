@@ -87,10 +87,11 @@ class UserRoleController extends AdminController
             });
         }
         $this->checkValidate($data, 'postAddRoleToUser');
-        $user  = User::with(['roles', 'permissions'])->findOrFail($data['uid']);
+        $user  = User::with(['roles.permissions', 'permissions'])->findOrFail($data['uid']);
         $roles = Role::with('permissions')->findMany($data['role_ids']);
         if ($roles && $roles->isNotEmpty()) {
-            $user->assignRole($roles)->load('roles.permissions');
+            $user->assignRole($roles);
+            $user->load('roles.permissions', 'permissions');
         }
         return $this->response($user);
     }
@@ -114,6 +115,7 @@ class UserRoleController extends AdminController
         $permissions = Permission::findMany($data['permission_ids']);
         if ($permissions && $permissions->isNotEmpty()) {
             $user->givePermissionTo($permissions);
+            $user->load('roles.permissions', 'permissions');
         }
         return $this->response($user);
     }
@@ -159,7 +161,8 @@ class UserRoleController extends AdminController
         $user  = User::with(['roles.permissions', 'permissions'])->findOrFail($data['uid']);
         $roles = Role::with('permissions')->findMany($data['role_ids']);
         if ($roles && $roles->isNotEmpty()) {
-            $user->syncRoles($roles)->load('roles.permissions');
+            $user->syncRoles($roles);
+            $user->load('roles.permissions', 'permissions');
         }
         return $this->response($user);
     }
@@ -184,6 +187,7 @@ class UserRoleController extends AdminController
         if ($permissions && $permissions->isNotEmpty()) {
             $user->syncPermissions($permissions);
         }
+        $user->load('roles.permissions', 'permissions');
         return $this->response($user);
     }
 
@@ -227,6 +231,7 @@ class UserRoleController extends AdminController
         $this->checkValidate($data, 'postAddRoleToUser');
         $user = User::with(['roles.permissions', 'permissions'])->findOrFail($data['uid']);
         $user->roles()->detach($data['role_ids']);
+        $user->load(['roles.permissions', 'permissions']);
         return $this->response($user);
     }
 
@@ -250,6 +255,7 @@ class UserRoleController extends AdminController
         if ($permissions && $permissions->isNotEmpty()) {
             $user->revokePermissionTo($permissions);
         }
+        $user->load('roles.permissions', 'permissions');
         return $this->response($user);
     }
 }
