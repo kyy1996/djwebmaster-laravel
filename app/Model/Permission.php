@@ -22,4 +22,19 @@ class Permission extends \Spatie\Permission\Models\Permission
     use SoftDeletes;
 
     public $modelName = '权限节点';
+
+    /**
+     * 权限所属菜单
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class, 'menu_id');
+    }
+
+    public static function create(array $attributes = []): Permission
+    {
+        return parent::create($attributes);
+    }
 }

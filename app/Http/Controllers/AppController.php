@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Common\Util;
 use App\Model\Code;
+use App\Model\Menu;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 
@@ -140,7 +142,27 @@ class AppController extends BaseController
      */
     function response($data = null, int $status = 200, array $headers = []): Response
     {
-        return new \App\Http\Response\JsonResponse($data, $status, $headers);
+        $extraFields = [];
+        if (@explode('/', request()->path())[1] === 'page' && (strtoupper(request()->method()) <=> 'GET') === 0) {
+            //注入菜单、用户角色信息
+            $extraFields = [
+                'menu' => Menu::getMenuForUser(Auth::user())->map(function (Menu $item) {
+//                    return $item->toArray();
+                    return Arr::only($item->toArray(), ['id', 'title', 'description', 'url', 'icon_class', 'sort', 'group', 'parent_id']);
+                })->sort(function ($a, $b) {
+                    return $a['sort'] - $b['sort'];
+                })->groupBy('group')->map(function ($menus) {
+                    $menus = array_values(Util::list2tree($menus));
+                    $menus = array_filter($menus, function ($menu) {
+                        //把没有子项的无用根节点删掉
+                        return $menu['parent_id'] || $menu['url'] || @$menu['_child'];
+                    });
+                    return $menus;
+                })->toArray(),
+                'user' => Auth::user(),
+            ];
+        }
+        return new \App\Http\Response\JsonResponse($data, $status, $headers, $extraFields);
     }
 
     /**

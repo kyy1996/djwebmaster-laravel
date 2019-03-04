@@ -12,7 +12,6 @@
 */
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -20,34 +19,24 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 //Route::get('article/index', 'Article\\ArticleController@getIndex');
-Route::middleware('web')->prefix('/common')->group(function () {
-    Route::prefix('/auth')->group(function () {
-        Auth::routes([
-            'verify' => true,
-        ]);
+Illuminate\Support\Facades\Route::middleware('web')->prefix('/ajax')->group(function () {
+    Route::prefix('/common')->group(function () {
+        Route::prefix('/auth')->group(function () {
+            \Illuminate\Support\Facades\Auth::routes([
+                'verify' => true,
+            ]);
+        });
     });
+    Illuminate\Support\Facades\Route::prefix('/common')->group(\App\Common\Util::commonRouteBindCallback());
+});
 
-    Route::any('{module}/{controller}/{action?}', function (string $module, string $controller, string $action = 'index') {
-        $method     = strtolower(request()->method());
-        $module     = ucfirst($module);
-        $action     = $method . ucfirst($action);
-        $controller = ucfirst($controller) . 'Controller';
-
-        $namespaces = [
-            'App',
-            'Http',
-            'Controllers',
-            $module,
-            $controller,
-        ];
-        $className  = implode('\\', $namespaces);
-        if (!class_exists($className)) {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className);
-        }
-        $clazz = new ReflectionClass($className);
-        if (!$clazz->hasMethod($action)) {
-            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className . ':' . $action);
-        }
-        return app($className)->callAction($action, [request(),]);
+Illuminate\Support\Facades\Route::middleware('web')->prefix('/page')->group(function () {
+    Route::prefix('/common')->group(function () {
+        Route::prefix('/auth')->group(function () {
+            \Illuminate\Support\Facades\Auth::routes([
+                'verify' => true,
+            ]);
+        });
     });
+    Illuminate\Support\Facades\Route::prefix('/common')->group(\App\Common\Util::commonRouteBindCallback());
 });

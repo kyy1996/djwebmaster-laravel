@@ -32,4 +32,9 @@ class Role extends \Spatie\Permission\Models\Role
     const STATUS_ALL     = -1;
     const STATUS_VALID   = 1;
     const STATUS_INVALID = 0;
+
+    public static function create(array $attributes = []): Role
+    {
+        return parent::create($attributes);
+    }
 }

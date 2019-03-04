@@ -63,7 +63,7 @@ class SubscriberController extends AdminController
      */
     public function getIndex(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'getIndex');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $scope      = $request->input('scope');
         $subscriber = new Subscriber();
         if ($scope !== null && $scope > 0) {
@@ -85,7 +85,7 @@ class SubscriberController extends AdminController
      */
     public function getShow(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'getShow');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $id   = +$request->input('id');
         $data = Subscriber::findOrFail($id);
         return $this->response($data);
@@ -100,7 +100,7 @@ class SubscriberController extends AdminController
      */
     public function postUpdate(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'postUpdate');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $id = $request->input('id');
         if ($id !== null) {
             $model = Subscriber::findOrFail($id);
@@ -131,7 +131,7 @@ class SubscriberController extends AdminController
      */
     public function deleteDelete(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'deleteDelete');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $id    = $request->input('id');
         $model = Subscriber::findOrFail($id);
         $ret   = $model->delete();

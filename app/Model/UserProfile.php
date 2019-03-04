@@ -49,6 +49,11 @@ class UserProfile extends Model
         'stu_no', 'school', 'class', 'name',
     ];
 
+    /**
+     * 所属用户
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'uid');

@@ -18,6 +18,7 @@ class CreatePermissionTables extends Migration
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('menu_id')->nullable()->comment('所属菜单ID');
             $table->string('name')->comment('权限节点标识符，可以是：控制器/方法')->unique();
             $table->string('guard_name');
             $table->timestamps();
@@ -25,6 +26,8 @@ class CreatePermissionTables extends Migration
             $table->string('module')->default('Admin')->comment('权限规则所属模块');
             $table->softDeletes()->comment("软删除，也用来表示角色状态，校验时候仅查询存在数据，修改时查询全部数据");
             $table->comment = '用户权限规则表';
+
+            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('CASCADE')->onUpdate('CASCADE');
         });
 
         Schema::create($tableNames['roles'], function (Blueprint $table) {

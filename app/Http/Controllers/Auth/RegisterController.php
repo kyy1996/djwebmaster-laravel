@@ -56,7 +56,7 @@ class RegisterController extends AppController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('guest');
+//        $this->middleware('guest');
     }
 
     /**

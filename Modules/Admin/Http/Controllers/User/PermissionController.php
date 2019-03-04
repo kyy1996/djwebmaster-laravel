@@ -3,6 +3,7 @@
 namespace Modules\Admin\Http\Controllers\User;
 
 use App\Model\Code;
+use App\Model\Menu;
 use App\Model\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,15 +34,16 @@ class PermissionController extends AdminController
                 'id' => 'required|integer|min:1|exists:permissions,id',
             ],
             'postUpdate'   => [
-                'name'   => [
+                'name'    => [
                     'required',
                     'string',
                     'min:1',
                     Rule::unique('permissions')->ignore(\request()->input('id')),
                 ],
-                'title'  => 'required|string|min:1',
-                'id'     => 'nullable|integer|min:1',
-                'module' => 'nullable|string|min:1',
+                'title'   => 'required|string|min:1',
+                'id'      => 'nullable|integer|min:1',
+                'module'  => 'nullable|string|min:1',
+                'menu_id' => 'nullable|integer|min:0',
             ],
             'deleteDelete' => [
                 'id' => 'required|integer|min:1|exists:permissions,id',
@@ -59,11 +61,9 @@ class PermissionController extends AdminController
     {
         $data = $request->all();
         $this->checkValidate($data, 'getIndex');
-        $permission = new Permission();
-        if ($request->input('with_trashed')) {
-            $permission = $permission->withTrashed();
-        }
-        $pagination = $this->getPaginateResponse($permission->paginate($this->pageSize));
+        $permission              = new Permission();
+        $pagination              = $this->getPaginateResponse($permission->paginate($this->pageSize));
+        $pagination['menu_list'] = Menu::getNestedTitleMenuList();
         return $this->response($pagination);
     }
 
@@ -83,7 +83,14 @@ class PermissionController extends AdminController
         $permission->name  = $data['name'];
         $permission->title = @$data['title'] ?: '';
         @$data['module'] !== null && $permission->module = $data['module'];
+        if ($menuId = $request->input('menu_id')) {
+            $permission->menu()->associate(Menu::findOrFail($menuId));
+        } else {
+            $permission->menu()->dissociate();
+        }
         $permission->saveOrFail();
+        $permission->load('menu');
+        $permission['menu_list'] = Menu::getNestedTitleMenuList();
         return $this->response($permission);
     }
 
@@ -96,8 +103,9 @@ class PermissionController extends AdminController
     public function getShow(Request $request): Response
     {
         $this->checkValidate($request->all(), 'getShow');
-        $id         = +$request->input('id');
-        $permission = Permission::findOrFail($id);
+        $id                      = +$request->input('id');
+        $permission              = Permission::with('menu')->findOrFail($id);
+        $permission['menu_list'] = Menu::getNestedTitleMenuList();
         return $this->response($permission);
     }
 

@@ -21,15 +21,18 @@ use Illuminate\Contracts\Support\Jsonable;
  */
 class JsonResponse extends \Illuminate\Http\Response
 {
-    public function __construct($content = null, int $status = 200, array $headers = [])
+    private $extraFields = [];
+
+    public function __construct($content = null, int $status = 200, array $headers = [], array $extraFields = [])
     {
+        $this->setExtraFields($extraFields);
         parent::__construct($content, $status, $headers);
     }
 
     /**
      * 设置内容
      *
-     * @param array $data
+     * @param array|null $data
      * @return \Illuminate\Http\Response
      */
     public function setContent($data = []): \Illuminate\Http\Response
@@ -50,6 +53,7 @@ class JsonResponse extends \Illuminate\Http\Response
             'msg'  => Code::getMessage(),
             'data' => null,
         ];
+        is_array($this->getExtraFields()) && $defaultData = $defaultData + $this->getExtraFields();
         if ($data === null) {
             return $defaultData;
         }
@@ -73,5 +77,21 @@ class JsonResponse extends \Illuminate\Http\Response
         }
 
         return Util::toJson($content);
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtraFields(): array
+    {
+        return $this->extraFields;
+    }
+
+    /**
+     * @param array $extraFields
+     */
+    public function setExtraFields(array $extraFields): void
+    {
+        $this->extraFields = $extraFields;
     }
 }

@@ -25,8 +25,8 @@ class Permission
     use ExceptUrl;
 
     protected $except = [
-        '/api/common/auth/*',
-        '/page/common/auth/*',
+        '/api/ajax/common/auth/*',
+        '/api/page/common/auth/*',
     ];
 
     /**

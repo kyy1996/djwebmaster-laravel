@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class VerifyCsrfToken extends Middleware
 {
@@ -21,7 +21,8 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        '/api/common/auth/*',
+        '/api/ajax/common/auth/*',
+        '/api/page/common/auth/*',
     ];
 
     /**
@@ -29,8 +30,8 @@ class VerifyCsrfToken extends Middleware
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure                 $next
-     * @return mixed
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Illuminate\Session\TokenMismatchException
      */
     public function handle($request, Closure $next): Response
