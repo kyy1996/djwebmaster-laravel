@@ -68,7 +68,7 @@ class UserProfileController extends AdminController
             $user->create_ip = Util::getUserIp($request);
         }
         $user->saveOrFail();
-        !$uid && $user->profile()->create();
+        !$user->profile && $user->profile()->create();
         $user->profile->stu_no = $request->input('stu_no');
         $user->profile->class  = $request->input('class');
         $user->profile->school = $request->input('school');

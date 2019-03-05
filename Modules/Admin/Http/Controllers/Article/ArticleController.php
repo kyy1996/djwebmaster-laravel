@@ -22,10 +22,13 @@ class ArticleController extends AdminController
         'default'      => [
             'title'     => 'required|string|min:1',
             'content'   => 'required|string|min:1',
-            'cover_img' => 'filled|url',
-            'tags'      => 'filled|array',
+            'cover_img' => [
+                'nullable',
+                'regex:/^(http:|https:)?\/\/[^:\s]+$/',
+            ],
+            'tags'      => 'nullable|array',
             'hide'      => 'boolean',
-            'id'        => 'integer|min:1',
+            'id'        => 'nullable|integer|min:0',
         ],
         'getIndex'     => [
             'title'     => '',
@@ -56,7 +59,7 @@ class ArticleController extends AdminController
      */
     public function getIndex(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'getIndex');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $pagination = Article::orderBy('updated_at', 'DESC')->paginate($this->pageSize);
         return $this->response($this->getPaginateResponse($pagination));
     }
@@ -70,32 +73,31 @@ class ArticleController extends AdminController
      */
     public function postUpdate(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'postUpdate');
-        if (($id = $request->input('id', 0)) > 0) {
+        $this->checkValidate($request->all(), __FUNCTION__);
+        if ((($id = $request->input('id')) ?: 0) > 0) {
             $article = Article::findOrFail($id);
             ($coverImg = $request->input('cover_img')) !== null && $article->cover_img = $coverImg;
             ($title = $request->input('title')) !== null && $article->title = $title;
             ($content = $request->input('content')) !== null && $article->content = $content;
-            ($tags = $request->input('tags')) !== null && $article->tags = $tags;
-            ($hide = $request->input('hide')) !== null && $article->hide = $hide;
-            $article->ip  = Util::getUserIp($request);
-            $article->uid = Auth::id();
+            ($tags = $request->input('tags')) !== null && is_array($tags) && ($tags = array_values(array_filter($tags, 'trim'))) && $article->tags = $tags;
+            ($hide = $request->input('hide')) !== null && $article->hide = !!$hide;
         } else {
             $data    = [
-                'uid'           => Auth::id(),
                 'title'         => $request->input('title'),
                 'content'       => $request->input('content'),
                 'cover_img'     => $request->input('cover_img', ''),
-                'tags'          => $request->input('tags', []),
-                'hide'          => $request->input('hide', 0),
+                'tags'          => $request->input('tags') ?: [],
+                'hide'          => !!$request->input('hide', 0),
                 'read_count'    => 0,
                 'comment_count' => 0,
                 'extra'         => [],
-                'ip'            => Util::getUserIp($request),
             ];
             $article = new Article($data);
         }
+        $article->ip  = Util::getUserIp($request);
+        $article->uid = Auth::id();
         $article->saveOrFail();
+        $article->load('user');
         return $this->response($article);
     }
 
@@ -107,7 +109,7 @@ class ArticleController extends AdminController
      */
     public function getShow(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'getShow');
+        $this->checkValidate($request->all(), __FUNCTION__);
         if (($id = +$request->input('id', 0)) > 0) {
             $article = Article::findOrFail($id);
         } else {
@@ -125,7 +127,7 @@ class ArticleController extends AdminController
      */
     public function deleteDelete(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'deleteDelete');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $article = Article::findOrFail($request->input('id'));
         $row     = $article->delete();
         if (!$row) {
