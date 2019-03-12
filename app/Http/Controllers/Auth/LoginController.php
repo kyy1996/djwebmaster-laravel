@@ -27,8 +27,8 @@ class LoginController extends AppController
 
     protected static $rules = [
         'default' => [
-            'email'    => 'required|string',
-            'password' => 'required|string',
+            'username' => 'required|string',
+            'password' => 'required|string|min:6',
         ],
     ];
 
@@ -107,4 +107,8 @@ class LoginController extends AppController
         return $this->response();
     }
 
+    public function username(): string
+    {
+        return 'username';
+    }
 }
