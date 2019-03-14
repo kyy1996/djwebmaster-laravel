@@ -20,7 +20,7 @@ class Authenticate extends Middleware
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return string
      */
     protected function redirectTo($request)
@@ -31,7 +31,7 @@ class Authenticate extends Middleware
     /**
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
-     * @param  string[]                $guards
+     * @param string[]                 $guards
      * @return mixed
      * @throws \Illuminate\Auth\AuthenticationException
      */
@@ -42,7 +42,7 @@ class Authenticate extends Middleware
             return $next($request);
         }
         //调试模式就免登录
-        if (!app()->environment('production') && $request->input('nologin', false) && !$request->user()) {
+        if (!app()->environment('production') && !Auth::user() && $request->input('nologin', false)) {
             $user = User::find(1);
             if ($user) {
                 Auth::login($user);
