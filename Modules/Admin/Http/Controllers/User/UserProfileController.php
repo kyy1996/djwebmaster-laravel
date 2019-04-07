@@ -82,7 +82,7 @@ class UserProfileController extends AdminController
         $user->status    = $request->input('status', true);
         $user->update_ip = Util::getUserIp($request);
         $request->input('password') && $user->password = Hash::make($request->input('password'));
-        if ($uid > 0) {
+        if (!$uid || $uid < 0) {
             $user->create_ip = Util::getUserIp($request);
         }
         $user->saveOrFail();
