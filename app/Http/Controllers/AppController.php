@@ -30,8 +30,8 @@ class AppController extends BaseController
         if ($page !== null && is_integer($page) && +$page > 0) {
             $this->page = $page;
         }
-        $pageSize = request()->input('page_size');
-        if ($pageSize !== null && is_integer($pageSize) && +$pageSize > 0) {
+        $pageSize = request()->input('page_size') ?: request()->input('pageSize');
+        if ($pageSize && is_numeric($pageSize) && +$pageSize > 0) {
             $this->pageSize = $pageSize;
         }
     }
