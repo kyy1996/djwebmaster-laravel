@@ -19,7 +19,7 @@ class CreateUserLogsTable extends Migration
             $table->string('description', 500)->comment('行为描述，可以是markdown');
             $table->nullableMorphs('loggable');
             $table->boolean('result')->default(true)->comment('行为执行结果：0-失败/1-成功');
-            $table->json('extra')->default('{}')->comment('额外信息，相关URL/相关附件ID/相关文章ID/相关活动、职位/执行结果/失败原因等');
+            $table->json('extra')->nullable()->comment('额外信息，相关URL/相关附件ID/相关文章ID/相关活动、职位/执行结果/失败原因等');
             $table->ipAddress('ip')->nullable()->comment('操作人IP');
             $table->string('ua')->default('')->comment('操作人User-Agent');
             $table->timestamps();

@@ -22,23 +22,18 @@ class ArticleLogObserver extends CommonLogBaseObserver
         'title' => '标题',
     ];
 
-    public function created(Article $article)
+    public function created(Article $article): bool
     {
-        return $this->__call('created', Arr::wrap($article));
+        return $this->__call(__FUNCTION__, Arr::wrap($article));
     }
 
-    public function updated(Article $article)
+    public function updated(Article $article): bool
     {
-        return $this->__call('updated', Arr::wrap($article));
+        return $this->__call(__FUNCTION__, Arr::wrap($article));
     }
 
-    public function deleted(Article $article)
+    public function deleted(Article $article): bool
     {
-        return $this->__call('deleted', Arr::wrap($article));
-    }
-
-    public function retrieved(Article $article)
-    {
-        return $this->__call('retrieved', Arr::wrap($article));
+        return $this->__call(__FUNCTION__, Arr::wrap($article));
     }
 }

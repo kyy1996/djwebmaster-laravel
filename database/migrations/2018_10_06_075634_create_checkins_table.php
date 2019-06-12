@@ -21,7 +21,7 @@ class CreateCheckinsTable extends Migration
             $table->string('class')->default('')->comment('班级');
             $table->string('name')->default('')->comment('姓名');
             $table->boolean('valid')->default(true)->comment('是否有效');
-            $table->text('comment')->default('')->comment('备注');
+            $table->text('comment')->nullable()->comment('备注');
             $table->ipAddress('ip')->nullable()->comment('签到时用的IP');
             $table->string('ua')->default('')->comment('签到时所用浏览器User-Agent');
             $table->timestamps();

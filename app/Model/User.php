@@ -4,9 +4,14 @@ namespace App\Model;
 
 use App\Contract\MustVerifyMobile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -15,25 +20,44 @@ use Spatie\Permission\Traits\HasRoles;
  *
  * @property int
  *               $uid
- * @property string                                                                                                         $avatar             用户头像
- * @property string                                                                                                         $mobile             用户手机号
- * @property string                                                                                                         $password           加密后的用户密码
- * @property string                                                                                                         $email              用户邮箱
- * @property int                                                                                                            $admin              是否是管理员：0-普通用户/1-管理员
- * @property int                                                                                                            $status             账户状态：1-启用/0-停用
- * @property string|null                                                                                                    $email_verified_at  邮箱验证时间，为空表示邮箱还未被验证
- * @property string|null                                                                                                    $mobile_verified_at 手机号验证时间，为空表示手机还未被验证
- * @property string|null                                                                                                    $remember_token     记住密码TOKEN，即自动登录TOKEN，Token携带有效期
- * @property string|null                                                                                                    $create_ip          注册IP
- * @property string|null                                                                                                    $update_ip          更新IP
- * @property string|null                                                                                                    $last_login_at      上次登录时间
- * @property string|null                                                                                                    $last_login_ip      上次登录IP
- * @property \Illuminate\Support\Carbon|null                                                                                $created_at
- * @property \Illuminate\Support\Carbon|null                                                                                $updated_at
- * @property \Illuminate\Support\Carbon|null                                                                                $deleted_at         软删除时间
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[]                                       $clients
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]                                        $tokens
+ * @property string
+ *               $avatar             用户头像
+ * @property string
+ *               $mobile             用户手机号
+ * @property string
+ *               $password           加密后的用户密码
+ * @property string
+ *               $email              用户邮箱
+ * @property int
+ *               $admin              是否是管理员：0-普通用户/1-管理员
+ * @property int
+ *               $status             账户状态：1-启用/0-停用
+ * @property string|null
+ *               $email_verified_at  邮箱验证时间，为空表示邮箱还未被验证
+ * @property string|null
+ *               $mobile_verified_at 手机号验证时间，为空表示手机还未被验证
+ * @property string|null
+ *               $remember_token     记住密码TOKEN，即自动登录TOKEN，Token携带有效期
+ * @property string|null
+ *               $create_ip          注册IP
+ * @property string|null
+ *               $update_ip          更新IP
+ * @property string|null
+ *               $last_login_at      上次登录时间
+ * @property string|null
+ *               $last_login_ip      上次登录IP
+ * @property \Illuminate\Support\Carbon|null
+ *               $created_at
+ * @property \Illuminate\Support\Carbon|null
+ *               $updated_at
+ * @property \Illuminate\Support\Carbon|null
+ *               $deleted_at         软删除时间
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[]
+ *                    $clients
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
+ *                $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]
+ *                    $tokens
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreateIp($value)
@@ -52,27 +76,43 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdateIp($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Illuminate\Database\Eloquent\Builder
- * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]                                                        $actionLogs
- * @property-read \Illuminate\Database\Eloquent\Collection|Activity[]                                                       $activities
- * @property-read \Illuminate\Database\Eloquent\Collection|Article[]                                                        $articles
- * @property-read \Illuminate\Database\Eloquent\Collection|Attachment[]                                                     $attachments
- * @property-read \App\Model\Blacklist                                                                                      $blacklist
- * @property-read \Illuminate\Database\Eloquent\Collection|Checkin[]                                                        $checkins
- * @property-read \Illuminate\Database\Eloquent\Collection|Comment[]                                                        $comments
- * @property-read \Illuminate\Database\Eloquent\Collection|JobApplication[]                                                 $jobApplications
- * @property-read \Illuminate\Database\Eloquent\Collection|Job[]                                                            $jobs
- * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]                                                        $logs
- * @property-read \App\Model\UserProfile                                                                                    $profile
- * @property-read \Illuminate\Database\Eloquent\Collection|Signup[]                                                         $signups
- * @property-read \App\Model\Subscriber                                                                                     $subscriber
- * @property-read \Illuminate\Support\Collection                                                                            $applied_jobs
- * @property-read \Illuminate\Support\Collection                                                                            $checkin_activities
- * @property-read \Illuminate\Support\Collection                                                                            $signup_activities
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]
+ *                    $actionLogs
+ * @property-read \Illuminate\Database\Eloquent\Collection|Activity[]
+ *                    $activities
+ * @property-read \Illuminate\Database\Eloquent\Collection|Article[]
+ *                    $articles
+ * @property-read \Illuminate\Database\Eloquent\Collection|Attachment[]
+ *                    $attachments
+ * @property-read \App\Model\Blacklist
+ *                    $blacklist
+ * @property-read \Illuminate\Database\Eloquent\Collection|Checkin[]
+ *                    $checkins
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[]
+ *                    $comments
+ * @property-read \Illuminate\Database\Eloquent\Collection|JobApplication[]
+ *                    $jobApplications
+ * @property-read \Illuminate\Database\Eloquent\Collection|Job[]
+ *                    $jobs
+ * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[]
+ *                    $logs
+ * @property-read \App\Model\UserProfile
+ *                    $profile
+ * @property-read \Illuminate\Database\Eloquent\Collection|Signup[]
+ *                    $signups
+ * @property-read \App\Model\Subscriber
+ *                    $subscriber
+ * @property-read \Illuminate\Support\Collection
+ *                    $applied_jobs
+ * @property-read \Illuminate\Support\Collection
+ *                    $checkin_activities
+ * @property-read \Illuminate\Support\Collection
+ *                    $signup_activities
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static Builder|User onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|User withTrashed()
- * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @method static Builder|User withTrashed()
+ * @method static Builder|User withoutTrashed()
  */
 class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
 {
@@ -124,7 +164,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function profile()
+    public function profile(): HasOne
     {
         return $this->hasOne(UserProfile::class, 'uid');
     }
@@ -135,7 +175,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function activities()
+    public function activities(): HasMany
     {
         return $this->hasMany(Activity::class, 'uid');
     }
@@ -145,7 +185,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getCheckinActivitiesAttribute()
+    public function getCheckinActivitiesAttribute(): Collection
     {
         return $this->checkins()->pluck('activity_id');
     }
@@ -155,7 +195,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function checkins()
+    public function checkins(): HasMany
     {
         return $this->hasMany(Checkin::class, 'uid')->with('activity');
     }
@@ -165,7 +205,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getSignupActivitiesAttribute()
+    public function getSignupActivitiesAttribute(): Collection
     {
         return $this->signups()->pluck('activity_id');
     }
@@ -175,7 +215,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function signups()
+    public function signups(): HasMany
     {
         return $this->hasMany(Signup::class, 'uid')->with('activity');
     }
@@ -185,7 +225,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function jobs()
+    public function jobs(): HasMany
     {
         return $this->hasMany(Job::class, 'uid');
     }
@@ -193,9 +233,9 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
     /**
      * 用户申请的职位
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection|string[]
      */
-    public function getAppliedJobsAttribute()
+    public function getAppliedJobsAttribute(): Collection
     {
         return $this->jobApplications()->pluck('job_id');
     }
@@ -205,7 +245,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function jobApplications()
+    public function jobApplications(): HasMany
     {
         return $this->hasMany(JobApplication::class, 'uid')->with('job_id');
     }
@@ -215,7 +255,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function subscriber()
+    public function subscriber(): HasMany
     {
         return $this->hasMany(Subscriber::class, 'uid');
     }
@@ -225,7 +265,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class, 'uid');
     }
@@ -235,7 +275,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function articles()
+    public function articles(): HasMany
     {
         return $this->hasMany(Article::class, 'uid');
     }
@@ -245,7 +285,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function attachments()
+    public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class, 'uid');
     }
@@ -255,7 +295,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function blacklist()
+    public function blacklist(): HasOne
     {
         return $this->hasOne(Blacklist::class, 'uid');
     }
@@ -265,7 +305,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function actionLogs()
+    public function actionLogs(): HasMany
     {
         return $this->hasMany(UserLog::class, 'uid');
     }
@@ -275,7 +315,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function logs()
+    public function logs(): MorphMany
     {
         return $this->morphMany(UserLog::class, 'loggable');
     }
@@ -285,7 +325,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return bool
      */
-    public function getEmailVerifiedAttribute()
+    public function getEmailVerifiedAttribute(): bool
     {
         return $this->hasVerifiedEmail();
     }
@@ -295,9 +335,9 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return bool
      */
-    public function getMobileVerifiedAttribute()
+    public function getMobileVerifiedAttribute(): bool
     {
-        return !is_null($this->getAttribute('mobile_verified_at'));
+        return $this->getAttribute('mobile_verified_at') !== null;
     }
 
     /**
@@ -305,9 +345,9 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyMobile
      *
      * @return bool
      */
-    public function getIsBlacklistedAttribute()
+    public function getIsBlacklistedAttribute(): bool
     {
         $blacklist = $this->blacklist()->where('valid', 1)->first();
-        return !is_null($blacklist);
+        return $blacklist !== null;
     }
 }

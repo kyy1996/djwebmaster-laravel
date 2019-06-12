@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSignupsTable extends Migration
 {
@@ -24,7 +25,7 @@ class CreateSignupsTable extends Migration
             $table->string('mobile', 20)->default('')->comment('通知手机号');
             $table->string('email')->default('')->comment('通知邮箱');
             $table->boolean('valid')->default(true)->comment('是否有效');
-            $table->text('comment')->default('')->comment('报名说明');
+            $table->text('comment')->nullable()->comment('报名说明');
             $table->ipAddress('ip')->nullable()->comment('报名时用的IP');
             $table->timestamps();
             $table->softDeletes()->comment('软删除时间');

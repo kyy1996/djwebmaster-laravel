@@ -27,7 +27,7 @@ class BlacklistEloquentUserProvider extends EloquentUserProvider
     /**
      * Retrieve a user by the given credentials.
      *
-     * @param  array $credentials
+     * @param array $credentials
      * @return \Illuminate\Contracts\Auth\Authenticatable|null|User
      */
     public function retrieveByCredentials(array $credentials)
@@ -38,6 +38,7 @@ class BlacklistEloquentUserProvider extends EloquentUserProvider
             return null;
         }
 
+        /** @var User $query */
         $query = $this->createModel();
 
         //允许：UID/EMAIL/手机号/学号
@@ -46,30 +47,35 @@ class BlacklistEloquentUserProvider extends EloquentUserProvider
             //email
             $query->where('email', $credentials['username']);
             return $query->first();
-        } else {
-            //uid
-            $model = (clone $query)->find($credentials['username']);
-            if ($model) return $model;
-            //手机号
-            $model = (clone $query)->where('mobile', $credentials['username'])->first();
-            if ($model) return $model;
-            //学号
-            $model = (new UserProfile())->where('stu_no', $credentials['username'])->first();
-            if ($model) return $model->user;
+        }
+
+        //uid
+        $model = (clone $query)->find($credentials['username']);
+        if ($model) {
+            return $model;
+        }
+        //手机号
+        $model = (clone $query)->where('mobile', $credentials['username'])->first();
+        if ($model) {
+            return $model;
+        }
+        //学号
+        $model = (new UserProfile())->where('stu_no', $credentials['username'])->first();
+        if ($model) {
+            return $model->user;
         }
         return null;
     }
 
-    public function validateCredentials(UserContract $user, array $credentials)
+    public function validateCredentials(UserContract $user, array $credentials): bool
     {
-        if ($user instanceof User) {
-            if ($user->getIsBlacklistedAttribute()) {
-                //黑名单
-                if (app()->environment('production') || !request()->input('nologin')) {
-                    //如果不是生产环境并且nologin标记为1，就允许黑名单用户访问
-                    Code::setCode(Code::ERR_USER_BLACKLIST);
-                    return false;
-                }
+        if (($user instanceof User)
+            && $user->getIsBlacklistedAttribute()) {
+            //黑名单
+            if (app()->environment('production') || !request()->input('nologin')) {
+                //如果不是生产环境并且nologin标记为1，就允许黑名单用户访问
+                Code::setCode(Code::ERR_USER_BLACKLIST);
+                return false;
             }
         }
         return parent::validateCredentials($user, $credentials);

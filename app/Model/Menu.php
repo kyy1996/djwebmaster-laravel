@@ -3,9 +3,14 @@
 namespace App\Model;
 
 use App\Common\Util;
+use Closure;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
+use Throwable;
 
 /**
  * App\Model\Menu
@@ -25,20 +30,20 @@ use Illuminate\Support\Collection;
  * @property \Illuminate\Support\Carbon|null                         $created_at
  * @property \Illuminate\Support\Carbon|null                         $updated_at
  * @property \Illuminate\Support\Carbon|null                         $deleted_at  软删除时间
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereGroup($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereHide($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereIconClass($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereModule($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereSort($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Menu whereUpdatedAt($value)
+ * @method static Builder|Menu whereCreatedAt($value)
+ * @method static Builder|Menu whereDeletedAt($value)
+ * @method static Builder|Menu whereDescription($value)
+ * @method static Builder|Menu whereGroup($value)
+ * @method static Builder|Menu whereHide($value)
+ * @method static Builder|Menu whereIconClass($value)
+ * @method static Builder|Menu whereId($value)
+ * @method static Builder|Menu whereModule($value)
+ * @method static Builder|Menu whereParentId($value)
+ * @method static Builder|Menu whereSort($value)
+ * @method static Builder|Menu whereStatus($value)
+ * @method static Builder|Menu whereTitle($value)
+ * @method static Builder|Menu whereType($value)
+ * @method static Builder|Menu whereUpdatedAt($value)
  * @mixin \Illuminate\Database\Query\Builder
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\Menu|null                               $parent
@@ -61,9 +66,9 @@ class Menu extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function parent()
+    public function parent(): BelongsTo
     {
-        return $this->belongsTo(Menu::class, 'parent_id');
+        return $this->belongsTo(__CLASS__, 'parent_id');
     }
 
     /**
@@ -71,9 +76,9 @@ class Menu extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function children()
+    public function children(): HasMany
     {
-        return $this->hasMany(Menu::class, 'parent_id');
+        return $this->hasMany(__CLASS__, 'parent_id');
     }
 
     /**
@@ -81,7 +86,7 @@ class Menu extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function logs()
+    public function logs(): MorphMany
     {
         return $this->morphMany(UserLog::class, 'loggable');
     }
@@ -94,12 +99,12 @@ class Menu extends Model
      */
     public static function getMenuTree($query = null): array
     {
-        $model = static::orderBy('id', 'asc')->orderBy('sort', 'asc');
-        if ($query && $query instanceof \Closure) {
+        $model = (new self())->orderBy('id')->orderBy('sort');
+        if ($query && $query instanceof Closure) {
             $model->where($query);
         }
         $list = $model->get();
-        $tree = Util::list2tree($list, 'id', 'parent_id', '_child', null) ?: [];
+        $tree = Util::list2tree($list, 'id', 'parent_id', '_child') ?: [];
         $tree = array_values($tree);
         return $tree;
     }
@@ -114,7 +119,7 @@ class Menu extends Model
      */
     public static function getNestedTitleMenuList($query = null, int $level = 1, string $delimiter = ' - '): array
     {
-        $menuTree = Menu::getMenuTree($query);
+        $menuTree = self::getMenuTree($query);
         Util::convertNestedTitleTree($menuTree, $delimiter);
         return Util::tree2list($menuTree, $level);
     }
@@ -132,30 +137,33 @@ class Menu extends Model
     /**
      * 根据用户拥有的权限，得到菜单
      *
-     * @param \Spatie\Permission\Traits\HasRoles|null $user
-     * @param string                                  $group 获取哪个分组的菜单
-     * @param null|\Closure                           $query
+     * @param \Spatie\Permission\Traits\HasRoles|\Illuminate\Contracts\Auth\Authenticatable|null $user
+     * @param string                                                                             $group 获取哪个分组的菜单
+     * @param null|\Closure                                                                      $query
      * @return \Illuminate\Support\Collection
      */
     public static function getMenuForUser($user, $group = '', $query = null): Collection
     {
         $model = static::with('permissions');
-        ($query instanceof \Closure) && $model->where($query);
+        ($query instanceof Closure) && $model->where($query);
         $group && $model->whereGroup($group);
         $menus = $model->get();
-        if (!$user) return $menus;
+        if (!$user) {
+            return $menus;
+        }
         $result = collect();
         /** @var \App\Model\Menu $menu */
-        foreach ($menus as $menu) {
-            if ($menu->permissions instanceof Collection) {
-                if ($menu->permissions->isNotEmpty()) {
-                    if (!$user->hasAnyPermission($menu->permissions->all())) {
-                        //菜单下的权限节点不为空，并且用户没有拥有其中任何一个权限
-                        continue;
-                    }
+        try {
+            foreach ($menus as $menu) {
+                if (($menu->permissions instanceof Collection)
+                    && $menu->permissions->isNotEmpty()
+                    && !$user->hasAnyPermission($menu->permissions->all())) {
+                    //菜单下的权限节点不为空，并且用户没有拥有其中任何一个权限
+                    continue;
                 }
+                $result->push($menu);
             }
-            $result->push($menu);
+        } catch (Throwable $e) {
         }
         return $result;
     }

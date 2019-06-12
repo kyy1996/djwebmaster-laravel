@@ -2,8 +2,13 @@
 
 namespace App\Model;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Model\Attachment
@@ -27,27 +32,27 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User|null                               $user
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereCount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereExtension($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereExtra($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereFilename($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereMd5($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereMime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment wherePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereSize($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereValid($value)
+ * @method static Builder|Attachment whereCount($value)
+ * @method static Builder|Attachment whereCreatedAt($value)
+ * @method static Builder|Attachment whereDeletedAt($value)
+ * @method static Builder|Attachment whereExtension($value)
+ * @method static Builder|Attachment whereExtra($value)
+ * @method static Builder|Attachment whereFilename($value)
+ * @method static Builder|Attachment whereId($value)
+ * @method static Builder|Attachment whereMd5($value)
+ * @method static Builder|Attachment whereMime($value)
+ * @method static Builder|Attachment wherePath($value)
+ * @method static Builder|Attachment whereSize($value)
+ * @method static Builder|Attachment whereUid($value)
+ * @method static Builder|Attachment whereUpdatedAt($value)
+ * @method static Builder|Attachment whereValid($value)
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Attachment onlyTrashed()
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Query\Builder|Attachment withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Attachment withoutTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereStorage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Attachment whereUrl($value)
+ * @method static Builder|Attachment whereStorage($value)
+ * @method static Builder|Attachment whereUrl($value)
  * @mixin \Illuminate\Database\Query\Builder
  */
 class Attachment extends Model
@@ -64,11 +69,58 @@ class Attachment extends Model
     ];
 
     /**
+     * @param \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null $file
+     * @param string                                                                   $directory
+     * @param string                                                                   $storageDisk oss|public|local
+     * @return \App\Model\Attachment|false
+     * @throws \Throwable
+     */
+    public static function upload($file, string $directory, string $storageDisk = '')
+    {
+        mb_regex_encoding('utf-8');
+        $root      = '/' . config('filesystems.root');
+        $directory = $root . '/' . $directory;
+        $directory = mb_ereg_replace('[\\/\\\]{2,}', DIRECTORY_SEPARATOR, $directory);
+        $directory = rtrim($directory, '/\\');
+        if (!$storageDisk) {
+            $storageDisk = Storage::getDefaultDriver();
+        }
+        $md5        = md5_file($file->getRealPath());
+        $attachment = self::whereStorage($storageDisk)->where('md5', $md5)->first();
+        if ($attachment) {
+            $attachment->count++;
+            $attachment->save();
+            return $attachment;
+        }
+        $disk      = Storage::disk($storageDisk);
+        $storePath = $disk->put($directory, $file);
+        if (!$storePath) {
+            Code::setCode(Code::ERR_FAIL);
+            return false;
+        }
+        $url        = method_exists($disk, 'url') ? $disk->url($storePath) : asset($storePath);
+        $response   = [
+            'uid'       => Auth::id(),
+            'filename'  => $file->getClientOriginalName(),
+            'storage'   => $storageDisk,
+            'path'      => $storePath,
+            'url'       => $url,
+            'size'      => $file->getSize(),
+            'md5'       => $md5,
+            'mime'      => $file->getMimeType(),
+            'extension' => $file->getClientOriginalExtension(),
+        ];
+        $attachment = new self($response);
+        $attachment->saveOrFail();
+        return $attachment;
+    }
+
+    /**
      * 上传的用户
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uid');
     }
@@ -78,7 +130,7 @@ class Attachment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
@@ -88,7 +140,7 @@ class Attachment extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function logs()
+    public function logs(): MorphMany
     {
         return $this->morphMany(UserLog::class, 'loggable');
     }

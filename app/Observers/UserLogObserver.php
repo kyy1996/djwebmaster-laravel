@@ -22,18 +22,18 @@ class UserLogObserver extends CommonLogBaseObserver
         'email' => 'EMAIL',
     ];
 
-    public function created(User $user)
+    public function created(User $user): bool
     {
-        return $this->__call('created', Arr::wrap($user));
+        return $this->__call(__FUNCTION__, Arr::wrap($user));
     }
 
-    public function updated(User $user)
+    public function updated(User $user): bool
     {
-        return $this->__call('updated', Arr::wrap($user));
+        return $this->__call(__FUNCTION__, Arr::wrap($user));
     }
 
-    public function deleted(User $user)
+    public function deleted(User $user): bool
     {
-        return $this->__call('deleted', Arr::wrap($user));
+        return $this->__call(__FUNCTION__, Arr::wrap($user));
     }
 }

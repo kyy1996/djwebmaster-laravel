@@ -3,7 +3,10 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 
 /**
  * App\Model\UserProfile
@@ -29,10 +32,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|UserLog[] $logs
  * @property-read \App\Model\User                                    $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|UserProfile onlyTrashed()
+ * @method static Builder|UserProfile onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Query\Builder|UserProfile withTrashed()
- * @method static \Illuminate\Database\Query\Builder|UserProfile withoutTrashed()
+ * @method static Builder|UserProfile withTrashed()
+ * @method static Builder|UserProfile withoutTrashed()
  */
 class UserProfile extends Model
 {
@@ -43,10 +46,10 @@ class UserProfile extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'stu_no', 'school', 'class', 'name',
+        'stu_no', 'school', 'class', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
     protected $visible  = [
-        'stu_no', 'school', 'class', 'name',
+        'stu_no', 'school', 'class', 'name', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     /**
@@ -54,7 +57,7 @@ class UserProfile extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'uid');
     }
@@ -64,7 +67,7 @@ class UserProfile extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function logs()
+    public function logs(): MorphMany
     {
         return $this->morphMany(UserLog::class, 'loggable');
     }

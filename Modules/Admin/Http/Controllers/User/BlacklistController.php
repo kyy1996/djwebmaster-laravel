@@ -39,14 +39,15 @@ class BlacklistController extends AdminController
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function getIndex(Request $request): Response
     {
         $data = $request->all();
-        $this->checkValidate($data, 'getIndex');
+        $this->checkValidate($data, __FUNCTION__);
         $blacklist = new Blacklist();
         if ($request->input('with_trashed')) {
-            $blacklist = $blacklist->withTrashed();
+            $blacklist = $blacklist::withTrashed();
         }
         if ($request->input('valid') !== null) {
             $blacklist->where('valid', $request->input('valid'));
@@ -68,7 +69,7 @@ class BlacklistController extends AdminController
     public function postUpdate(Request $request): Response
     {
         $data = $request->all();
-        $this->checkValidate($data, 'postUpdate');
+        $this->checkValidate($data, __FUNCTION__);
         $uid       = $request->input('uid');
         $blacklist = Blacklist::withTrashed()->whereUid($uid)->first();
         if (!$blacklist) {
@@ -77,10 +78,10 @@ class BlacklistController extends AdminController
         }
         unset($data['id']);
         $data['comment'] = $data['comment'] ?: '';
-        $data['valid']   = !!$data['valid'];
+        $data['valid']   = (bool)$data['valid'];
         $blacklist->fill($data);
         $blacklist->operator_uid = Auth::id();
-        $blacklist->restore();
+        $blacklist::restore();
         $blacklist->saveOrFail();
         return $this->response($blacklist);
     }
@@ -93,9 +94,9 @@ class BlacklistController extends AdminController
      */
     public function getShow(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'getShow');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $id        = +$request->input('id');
-        $blacklist = Blacklist::findOrFail($id);
+        $blacklist = (new Blacklist())->findOrFail($id);
         return $this->response($blacklist);
     }
 
@@ -108,9 +109,9 @@ class BlacklistController extends AdminController
      */
     public function deleteDelete(Request $request): Response
     {
-        $this->checkValidate($request->all(), 'deleteDelete');
+        $this->checkValidate($request->all(), __FUNCTION__);
         $id        = +$request->input('id');
-        $blacklist = Blacklist::findOrFail($id);
+        $blacklist = (new Blacklist())->findOrFail($id);
         $ret       = $blacklist->delete();
         if (!$ret) {
             Code::setCode(Code::ERR_DB_FAIL);

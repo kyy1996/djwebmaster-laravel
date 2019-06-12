@@ -20,7 +20,7 @@ class CreateCommentsTable extends Migration
             $table->string('nickname')->default('匿名')->comment('发表用户昵称');
             $table->string('email')->comment('发表人邮箱');
             $table->longText('content')->comment('内容');
-            $table->json('extra')->default('{}')->comment('额外信息：附件ID、相关URL');
+            $table->json('extra')->nullable()->comment('额外信息：附件ID、相关URL');
             $table->ipAddress('ip')->comment('发表人IP');
             $table->timestamps();
             $table->softDeletes()->comment('软删除时间');

@@ -23,7 +23,7 @@ class CreateAttachmentsTable extends Migration
             $table->string('md5', 32)->default('')->comment('文件MD5');
             $table->string('mime')->default('application/octet-stream')->comment('MIME类型');
             $table->string('extension')->default('')->comment('文件扩展名');
-            $table->json('extra')->default('{}')->comment('附件额外属性JSON对象，可以保存媒体长度，图片大小，引用数量等');
+            $table->json('extra')->nullable()->comment('附件额外属性JSON对象，可以保存媒体长度，图片大小，引用数量等');
             $table->boolean('valid')->default(true)->comment('文件是否有效（文件读不到就无效）');
             $table->unsignedInteger('count')->default(1)->comment('附件被上传了几次');
             $table->timestamps();

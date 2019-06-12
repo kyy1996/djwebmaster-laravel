@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Common\Util;
+use App\Http\Response\JsonResponse;
 use App\Model\Code;
 use App\Model\Menu;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -27,7 +29,7 @@ class AppController extends BaseController
     {
         //初始化分页
         $page = request()->input('page');
-        if ($page !== null && is_integer($page) && +$page > 0) {
+        if ($page !== null && is_int($page) && +$page > 0) {
             $this->page = $page;
         }
         $pageSize = request()->input('page_size') ?: request()->input('pageSize');
@@ -37,14 +39,14 @@ class AppController extends BaseController
     }
 
     protected static $rules = [
-        "default" => [
+        'default' => [
             'page'     => 'nullable|integer|min:1',
             'pageSize' => 'nullable|integer|min:1',
         ],
     ];
 
     protected static $rulesMessages = [
-        "default" => [
+        'default' => [
             'required' => '缺少必填参数[:attribute]',
             'filled'   => '[:attribute]不能为空',
             'string'   => '格式错误，[:attribute]应该为字符串',
@@ -64,8 +66,8 @@ class AppController extends BaseController
     ];
 
     protected static $rulesCodes = [
-        "default" => [
-            "Exists" => Code::ERR_MODEL_NOT_FOUND,
+        'default' => [
+            'Exists' => Code::ERR_MODEL_NOT_FOUND,
         ],
     ];
 
@@ -77,7 +79,7 @@ class AppController extends BaseController
      * @param array  $errors 错误
      * @param int    $code   错误码
      */
-    protected function checkValidate($data, $scene = 'default', &$errors = [], &$code = Code::ERR_PARAMETER)
+    protected function checkValidate($data, $scene = 'default', &$errors = [], &$code = Code::ERR_PARAMETER): void
     {
         $code      = Code::ERR_PARAMETER;
         $validator = Validator::make($data, $this->rules($scene), $this->rulesMessages($scene));
@@ -85,6 +87,7 @@ class AppController extends BaseController
             $rulesCode = $this->rulesCodes($scene);
             $failed    = $validator->failed();
             $errors    = Arr::flatten($validator->errors()->getMessages());
+            /** @noinspection LoopWhichDoesNotLoopInspection */
             foreach ($failed as $para => $v) {
                 if (isset($rulesCode[$para])) {
                     $code = $rulesCode[$para];
@@ -98,7 +101,6 @@ class AppController extends BaseController
                 }
                 throw new InvalidParameterException(Util::toJson($errors), $code);
             }
-
         }
     }
 
@@ -140,20 +142,20 @@ class AppController extends BaseController
      * @param array $headers
      * @return \Illuminate\Http\Response
      */
-    function response($data = null, int $status = 200, array $headers = []): Response
+    public function response($data = null, int $status = 200, array $headers = []): Response
     {
         $extraFields = [];
-        if (@explode('/', request()->path())[1] === 'page' && (strtoupper(request()->method()) <=> 'GET') === 0) {
+        if ((strtoupper(request()->method()) <=> 'GET') === 0 && @explode('/', request()->path())[1] === 'page') {
             //注入菜单、用户角色信息
             $extraFields = [
-                'menu' => Menu::getMenuForUser(Auth::user())->map(function (Menu $item) {
+                'menu' => Menu::getMenuForUser(Auth::user())->map(static function (Menu $item) {
 //                    return $item->toArray();
                     return Arr::only($item->toArray(), ['id', 'title', 'description', 'url', 'icon_class', 'sort', 'group', 'parent_id']);
-                })->sort(function ($a, $b) {
+                })->sort(static function ($a, $b) {
                     return $a['sort'] - $b['sort'];
-                })->groupBy('group')->map(function ($menus) {
+                })->groupBy('group')->map(static function ($menus) {
                     $menus = array_values(Util::list2tree($menus));
-                    $menus = array_filter($menus, function ($menu) {
+                    $menus = array_filter($menus, static function ($menu) {
                         //把没有子项的无用根节点删掉
                         return $menu['parent_id'] || $menu['url'] || @$menu['_child'];
                     });
@@ -162,7 +164,7 @@ class AppController extends BaseController
                 'user' => Auth::user(),
             ];
         }
-        return new \App\Http\Response\JsonResponse($data, $status, $headers, $extraFields);
+        return new JsonResponse($data, $status, $headers, $extraFields);
     }
 
     /**
@@ -171,7 +173,7 @@ class AppController extends BaseController
      * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $pagination
      * @return array
      */
-    public function getPaginateResponse(\Illuminate\Contracts\Pagination\LengthAwarePaginator $pagination): array
+    public function getPaginateResponse(LengthAwarePaginator $pagination): array
     {
         return [
             'items'     => $pagination->items(),

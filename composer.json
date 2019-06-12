@@ -1,7 +1,10 @@
 {
     "name": "laravel/laravel",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -12,14 +15,16 @@
         "aliyuncs/oss-sdk-php": "^2.3",
         "endroid/qr-code": "^3.4",
         "fideloper/proxy": "^4.0",
-        "laravel/framework": "5.7.*",
+        "jacobcyl/ali-oss-storage": "dev-master",
+        "laravel/framework": "^5.8.0",
         "laravel/passport": "^7.0",
         "laravel/tinker": "^1.0",
         "nwidart/laravel-modules": "^4.0",
         "predis/predis": "^1.1",
         "spatie/laravel-permission": "^2.34",
         "spipu/html2pdf": "^5.2",
-        "zedisdog/laravel-schema-extend": "^1.1"
+        "zedisdog/laravel-schema-extend": "^1.1",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.5",
@@ -49,8 +54,7 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": [
-            ]
+            "dont-discover": []
         }
     },
     "scripts": {

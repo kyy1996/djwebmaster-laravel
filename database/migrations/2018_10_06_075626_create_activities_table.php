@@ -19,10 +19,10 @@ class CreateActivitiesTable extends Migration
             $table->string('location')->default('')->comment('活动举办地点');
             $table->string('host')->default('')->comment('活动主持人：孔元元，或者孔元元/王一帅，斜杠分割多个人');
             $table->string('time')->default('')->comment('活动举办时间：周三20:00');
-            $table->text('comment')->default('')->comment('活动备注');
-            $table->json('extra')->default('{}')->comment('额外信息：相关附件ID');
+            $table->text('comment')->comment('活动备注');
+            $table->json('extra')->comment('额外信息：相关附件ID');
             $table->unsignedInteger('article_id')->nullable('')->comment('活动关联文章ID，可为空');
-            $table->json('host_uids')->default('[]')->comment('活动主持人对应UID数组：[1,2]，因为一个活动可以有多个人来主持');
+            $table->json('host_uids')->comment('活动主持人对应UID数组：[1,2]，因为一个活动可以有多个人来主持');
             $table->unsignedSmallInteger('availability')->default(50)->comment('活动可容纳人数');
             $table->unsignedSmallInteger('signup_amount')->default(0)->comment('活动报名人数，程序自动更新');
             $table->boolean('hide')->default(false)->comment('是否属于隐藏活动');
