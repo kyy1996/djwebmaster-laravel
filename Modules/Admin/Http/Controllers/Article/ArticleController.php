@@ -67,35 +67,22 @@ class ArticleController extends AdminController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      * @throws \Throwable
      */
     public function postUpdate(Request $request): Response
     {
         $this->checkValidate($request->all(), __FUNCTION__);
-        if ((($id = $request->input('id')) ?: 0) > 0) {
-            $article = Article::findOrFail($id);
-            ($coverImg = $request->input('cover_img')) !== null && $article->cover_img = $coverImg;
-            ($title = $request->input('title')) !== null && $article->title = $title;
-            ($content = $request->input('content')) !== null && $article->content = $content;
-            ($tags = $request->input('tags')) !== null && is_array($tags) && ($tags = array_values(array_filter($tags, 'trim'))) && $article->tags = $tags;
-            ($hide = $request->input('hide')) !== null && $article->hide = !!$hide;
-        } else {
-            $data    = [
-                'title'         => $request->input('title'),
-                'content'       => $request->input('content'),
-                'cover_img'     => $request->input('cover_img', ''),
-                'tags'          => $request->input('tags') ?: [],
-                'hide'          => !!$request->input('hide', 0),
-                'read_count'    => 0,
-                'comment_count' => 0,
-                'extra'         => [],
-            ];
-            $article = new Article($data);
-        }
-        $article->ip  = Util::getUserIp($request);
-        $article->uid = Auth::id();
+        $article            = (($id = $request->input('id')) ?: 0) > 0 ? Article::findOrFail($id) : new Article();
+        $article->title     = $request->input('title') ?: '';
+        $article->content   = $request->input('content') ?: '';
+        $article->cover_img = $request->input('cover_img') ?: '';
+        $article->tags      = array_values(array_filter((array)$request->input('tags'), 'trim'));
+        $article->hide      = (bool)$request->input('hide');
+        $article->ip        = Util::getUserIp($request);
+        $article->uid       = Auth::id();
+        $article->extra     = $request->input('extra') ?: '{}';
         $article->saveOrFail();
         $article->load('user');
         return $this->response($article);

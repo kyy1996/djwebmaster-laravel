@@ -9,10 +9,13 @@
 namespace App\Common;
 
 
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use ReflectionClass;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * 工具类
@@ -33,30 +36,28 @@ class Util
         if ($request === null) {
             $request = request();
         }
-        $ip = '';
+        $userIp = '';
         if ($request->server('HTTP_CLIENT_IP') && strcasecmp($request->server('HTTP_CLIENT_IP'), 'unknown')) {
-            $ip = $request->server('HTTP_CLIENT_IP');
+            $userIp = $request->server('HTTP_CLIENT_IP');
         }
         if ($request->server('HTTP_X_FORWARDED_FOR') && strcasecmp($request->server('HTTP_X_FORWARDED_FOR'), 'unknown')) {
-            $ip  = $request->server('HTTP_X_FORWARDED_FOR');
-            $ips = explode(', ', $request->server('HTTP_X_FORWARDED_FOR'));
-            if ($ip) {
-                array_unshift($ips, $ip);
-                $ip = '';
+            $userIp = $request->server('HTTP_X_FORWARDED_FOR');
+            $ips    = explode(', ', $request->server('HTTP_X_FORWARDED_FOR'));
+            if ($userIp) {
+                array_unshift($ips, $userIp);
+                $userIp = '';
             }
-            for ($i = 0; $i < count($ips); $i++) {
-                if (!preg_match('/^(10│172.16│192.168)\./', $ips[$i])) {
-                    $ip = $ips[$i];
+            foreach ($ips as $ip) {
+                if (!preg_match('/^(10│172.16│192.168)\./u', $ip)) {
+                    $userIp = $ip;
                     break;
                 }
             }
         } else if ($request->server('REMOTE_ADDR') && strcasecmp($request->server('REMOTE_ADDR'), 'unknown')) {
-            $ip = $request->server('REMOTE_ADDR');
-        } else if ($request->server('REMOTE_ADDR') && strcasecmp($request->server('REMOTE_ADDR'), 'unknown')) {
-            $ip = $request->server('REMOTE_ADDR');
+            $userIp = $request->server('REMOTE_ADDR');
         }
-        $ip && ($ip = preg_match('/[\d\.]{7,15}/', $ip, $matches) ? $matches [0] : '');
-        return $ip;
+        $userIp && ($userIp = preg_match('/[\d\.]{7,15}/', $userIp, $matches) ? $matches [0] : '');
+        return $userIp;
     }
 
     /**
@@ -71,7 +72,7 @@ class Util
         foreach ($arrays as &$array) {
             foreach ($array as $key => $item) {
                 if (is_array($item) && Arr::exists($arr1, $key) && is_array($arr1[$key])) {
-                    $item = Util::arrayRecursiveMerge($arr1[$key], $item);
+                    $item = self::arrayRecursiveMerge($arr1[$key], $item);
                 }
                 $arr1[$key] = $item;
             }
@@ -99,7 +100,7 @@ class Util
      * @param int    $options
      * @return false|string
      */
-    public static function fromJson($json, $assoc = false, $options = JSON_THROW_ON_ERROR)
+    public static function fromJson($json, $assoc = false, $options = 0)
     {
         return json_decode($json, $assoc, 512, $options);
     }
@@ -114,7 +115,7 @@ class Util
      * @param int                                           $root  根节点的pid值
      * @return array
      */
-    public static function list2tree($list, $id = "id", $pid = "parent_id", $child = "_child", $root = null)
+    public static function list2tree($list, $id = 'id', $pid = 'parent_id', $child = '_child', $root = null): array
     {
         ($list instanceof Arrayable) && $list = $list->toArray();
         $refer = [];
@@ -128,10 +129,8 @@ class Util
             if ($item[$pid] === $root) {
                 //根节点
                 $tree[$item[$id]] = &$list[$key];
-            } else {
-                if (key_exists($item[$pid], $refer)) {
-                    $refer[$item[$pid]][$child][] = &$list[$key];
-                }
+            } else if (array_key_exists($item[$pid], $refer)) {
+                $refer[$item[$pid]][$child][] = &$list[$key];
             }
         }
 
@@ -154,7 +153,9 @@ class Util
             if ($parentInfo) {
                 $childItem[$titleKey] = $parentInfo[$titleKey] . $delimiter . $childItem[$titleKey];
             }
-            if (!isset($childItem[$childKey]) || !$childItem[$childKey]) continue;
+            if (!isset($childItem[$childKey]) || !$childItem[$childKey]) {
+                continue;
+            }
             static::convertNestedTitleTree($childItem[$childKey], $delimiter, $childKey, $titleKey, $childItem);
         }
     }
@@ -212,10 +213,10 @@ class Util
      * @param string $subModule
      * @return \Closure
      */
-    public static function commonRouteBindCallback(string $subModule = ''): \Closure
+    public static function commonRouteBindCallback(string $subModule = ''): Closure
     {
-        return function (\Illuminate\Routing\Router $router) use ($subModule) {
-            $router->any('{module}/{controller}/{action?}', function (string $module, string $controller, string $action = 'index') use ($subModule) {
+        return static function (Router $router) use ($subModule) {
+            $router->any('{module}/{controller}/{action?}', static function (string $module, string $controller, string $action = 'index') use ($subModule) {
                 $method     = strtolower(request()->method());
                 $module     = ucfirst($module);
                 $action     = $method . ucfirst($action);
@@ -233,11 +234,11 @@ class Util
                 $className  = implode('\\', $namespaces);
                 //region 检查控制器与方法是否存在
                 if (!class_exists($className)) {
-                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException($className);
+                    throw new NotFoundHttpException($className);
                 }
                 $clazz = new ReflectionClass($className);
                 if (!$clazz->hasMethod($action)) {
-                    throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException(!app()->environment('production') ? $className . ':' . $action : null);
+                    throw new NotFoundHttpException(!app()->environment('production') ? $className . ':' . $action : null);
                 }
                 //endregion
                 return \request()->route()->uses($className . '@' . $action)->run();

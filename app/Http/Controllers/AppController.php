@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Common\Util;
+use App\Exceptions\InvalidParameterException;
 use App\Http\Response\JsonResponse;
 use App\Model\Code;
 use App\Model\Menu;
@@ -15,7 +16,6 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
 
 class AppController extends BaseController
 {
@@ -47,21 +47,22 @@ class AppController extends BaseController
 
     protected static $rulesMessages = [
         'default' => [
-            'required' => '缺少必填参数[:attribute]',
-            'filled'   => '[:attribute]不能为空',
-            'string'   => '格式错误，[:attribute]应该为字符串',
-            'integer'  => '格式错误，[:attribute]应该为整数',
-            'between'  => '[:attribute]范围错误，要求参数在:min - :max',
-            'in'       => '[:attribute]取值应该在 :values 内',
-            'array'    => '格式错误，[:attribute]应该为数组',
-            'url'      => '格式错误，[:attribute]应该为URL',
-            'email'    => '格式错误，[:attribute]应该为EMAIL地址',
-            'min'      => '[:attribute]数量不正确，至少为:min',
-            'max'      => '选中数过多，最多允许:max个[:attribute]',
-            'unique'   => '[:attribute]数据重复',
-            'exists'   => '[:attribute]记录不存在', //定义[code:xxx] 会返回$code码
-            'boolean'  => '[:attribute]只能是0或1',
-            'regex'    => '格式错误，[:attribute]不符合规则',
+            'required'       => '缺少必填参数[:attribute]',
+            'filled'         => '[:attribute]不能为空',
+            'string'         => '[:attribute]格式错误，应该为字符串',
+            'integer'        => '[:attribute]格式错误，应该为整数',
+            'between'        => '[:attribute]范围错误，要求参数在:min - :max',
+            'in'             => '[:attribute]取值应该在 :values 内',
+            'array'          => '[:attribute]格式错误，应该为数组',
+            'url'            => '[:attribute]格式错误，应该为URL',
+            'email'          => '[:attribute]格式错误，应该为EMAIL地址',
+            'min'            => '[:attribute]数量不正确，至少为:min',
+            'max'            => '[:attribute]选中数过多，最多允许:max个',
+            'unique'         => '[:attribute]数据重复',
+            'exists'         => '[:attribute]记录不存在', //定义[code:xxx] 会返回$code码
+            'boolean'        => '[:attribute]只能是0或1',
+            'regex'          => '[:attribute]格式错误，[:input]不符合规则',
+            'digits_between' => '[:attribute]必须是数字，且长度为:min - :max',
         ],
     ];
 
@@ -91,15 +92,15 @@ class AppController extends BaseController
             foreach ($failed as $para => $v) {
                 if (isset($rulesCode[$para])) {
                     $code = $rulesCode[$para];
-                    throw new InvalidParameterException(Util::toJson($errors), $code);
+                    throw new InvalidParameterException($validator, $code);
                 }
                 foreach ($v as $rule => $vv) {
                     if (isset($rulesCode[$rule])) {
                         $code = $rulesCode[$rule];
-                        throw new InvalidParameterException(Util::toJson($errors), $code);
+                        throw new InvalidParameterException($validator, $code);
                     }
                 }
-                throw new InvalidParameterException(Util::toJson($errors), $code);
+                throw new InvalidParameterException($validator, $code);
             }
         }
     }

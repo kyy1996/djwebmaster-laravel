@@ -31,6 +31,7 @@ class UserProfileController extends AdminController
                     Rule::unique('users')->ignore(\request()->input('uid'), 'uid'),
                 ],
                 'password' => 'nullable|string|min:6',
+                'stu_no'   => 'nullable|digits_between:0,12',
                 'mobile'   => [
                     'nullable',
                     'string',
@@ -101,7 +102,7 @@ class UserProfileController extends AdminController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function getShow(Request $request)
+    public function getShow(Request $request): Response
     {
         $this->checkValidate($request->all(), __FUNCTION__);
         $user = User::findOrFail($request->input('uid'));

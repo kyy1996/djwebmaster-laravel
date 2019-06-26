@@ -12,6 +12,7 @@ use App\Common\Util;
 use App\Model\Code;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Http\Response;
 
 /**
  * 响应
@@ -19,7 +20,7 @@ use Illuminate\Contracts\Support\Jsonable;
  *
  * @package App\Http\Response
  */
-class JsonResponse extends \Illuminate\Http\Response
+class JsonResponse extends Response
 {
     private $extraFields = [];
 
@@ -35,7 +36,7 @@ class JsonResponse extends \Illuminate\Http\Response
      * @param array|null $data
      * @return \Illuminate\Http\Response
      */
-    public function setContent($data = []): \Illuminate\Http\Response
+    public function setContent($data = []): Response
     {
         return parent::setContent($this->generateData($data));
     }
@@ -53,7 +54,7 @@ class JsonResponse extends \Illuminate\Http\Response
             'msg'  => Code::getMessage(),
             'data' => null,
         ];
-        is_array($this->getExtraFields()) && $defaultData = $defaultData + $this->getExtraFields();
+        is_array($this->getExtraFields()) && $defaultData = array_merge($defaultData, $this->getExtraFields());
         if ($data === null) {
             return $defaultData;
         }
@@ -65,14 +66,16 @@ class JsonResponse extends \Illuminate\Http\Response
     /**
      * Morph the given content into JSON.
      *
-     * @param  mixed $content
+     * @param mixed $content
      * @return string
      */
     protected function morphToJson($content)
     {
         if ($content instanceof Jsonable) {
             return $content->toJson();
-        } else if ($content instanceof Arrayable) {
+        }
+
+        if ($content instanceof Arrayable) {
             return Util::toJson($content->toArray());
         }
 
